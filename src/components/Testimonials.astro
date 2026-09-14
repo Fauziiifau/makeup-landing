@@ -1,0 +1,42 @@
+---
+// Testimonials.astro — Section #testimonials: Public grid + review action buttons
+---
+
+<section id="testimonials" class="py-16 sm:py-24 bg-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+            <span class="text-xs font-bold text-gold uppercase tracking-widest">Testimoni Klien</span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso mt-2">Cerita Momen Spesial Mereka</h2>
+            <p class="text-muted-brown text-sm sm:text-base mt-2">Kepuasan dan kebahagiaan klien adalah kebanggaan terbesar kami.</p>
+
+            <!-- Action Buttons -->
+            <div class="mt-6 flex items-center justify-center gap-3 flex-wrap">
+                <button id="open-review-btn"
+                    class="inline-flex items-center gap-2 bg-gold hover:bg-gold-hover text-white px-5 py-2.5 rounded-full text-xs font-semibold shadow-gold-glow transition-all btn-touch">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Tulis Ulasan Saya</span>
+                </button>
+
+                <button id="open-admin-btn"
+                    class="inline-flex items-center gap-2 bg-white text-espresso border border-warm-nude hover:bg-warm-nude px-5 py-2.5 rounded-full text-xs font-semibold transition-all btn-touch">
+                    <i class="fa-solid fa-user-shield text-gold"></i>
+                    <span>Moderasi Admin</span>
+                    <span id="pending-badge"
+                        class="hidden bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Approved Testimonials Grid Container (filled by app.js) -->
+        <div id="testimonials-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8"></div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('open-review-btn')?.addEventListener('click', () => {
+        window.dispatchEvent(new CustomEvent('openReviewModal'));
+    });
+    document.getElementById('open-admin-btn')?.addEventListener('click', () => {
+        window.dispatchEvent(new CustomEvent('openAdminLogin'));
+    });
+</script>

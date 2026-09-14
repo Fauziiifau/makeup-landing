@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@theme {
+    /* Custom Colors */
+    --color-cream: #FAF7F5;
+    --color-warm-nude: #F2E8E1;
+    --color-blush: #E5C3C6;
+    --color-espresso: #2D221E;
+    --color-muted-brown: #6B5952;
+    --color-gold: #C5A059;
+    --color-gold-hover: #B38E46;
+
+    /* Custom Font Families */
+    --font-family-serif: 'Playfair Display', Georgia, serif;
+    --font-family-sans: 'Plus Jakarta Sans', sans-serif;
+
+    /* Custom Box Shadows */
+    --shadow-soft: 0 10px 30px -10px rgba(45, 34, 30, 0.08);
+    --shadow-gold-glow: 0 4px 20px -2px rgba(197, 160, 89, 0.35);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #FAF7F5;
+    color: #2D221E;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #FAF7F5;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #C5A059;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #B38E46;
+}
+
+/* Hide Scrollbar for Horizontal Touch Sliders */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Glassmorphic Navbar */
+.glass-nav {
+    background: rgba(250, 247, 245, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(242, 232, 225, 0.9);
+}
+
+/* Luxury Card Borders & Hover */
+.luxury-card {
+    background: #ffffff;
+    border: 1px solid rgba(197, 160, 89, 0.22);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.luxury-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(197, 160, 89, 0.65);
+    box-shadow: 0 16px 32px -8px rgba(45, 34, 30, 0.1);
+}
+
+/* Touch Button Active State */
+.btn-touch {
+    transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-touch:active {
+    transform: scale(0.96);
+}
+
+/* Shimmer Gold Accent Badge */
+.gold-badge {
+    background: linear-gradient(135deg, #C5A059 0%, #E5C3C6 100%);
+    color: #ffffff;
+}
+
+/* Pulsing WhatsApp Indicator */
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+}
+
+.wa-pulse {
+    animation: pulse-ring 2s infinite;
+}

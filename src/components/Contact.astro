@@ -1,0 +1,101 @@
+---
+// Contact.astro — Section #contact: WhatsApp direct booking form + social links
+---
+
+<section id="contact"
+    class="py-16 sm:py-24 bg-gradient-to-t from-warm-nude/40 to-cream border-t border-warm-nude">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-gold/30 space-y-8">
+            <div class="text-center space-y-2">
+                <span class="text-xs font-bold text-gold uppercase tracking-widest">Konsultasi &amp; Reservasi</span>
+                <h2 class="font-serif text-2xl sm:text-4xl font-bold text-espresso">Formulir Pemesanan Jadwal</h2>
+                <p class="text-xs sm:text-sm text-muted-brown">Isi data di bawah ini untuk mengirimkan format pemesanan otomatis langsung ke WhatsApp kami.</p>
+            </div>
+
+            <form id="wa-booking-form" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso mb-1">Nama Lengkap *</label>
+                        <input type="text" id="wa-form-name" required placeholder="Contoh: Dinda Rahmawati"
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso mb-1">Tanggal Acara *</label>
+                        <input type="date" id="wa-form-date" required
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso mb-1">Pilih Layanan *</label>
+                        <select id="wa-form-service" required
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none">
+                            <option value="Tunangan (Rp 180.000)">Tunangan / Lamaran (Rp 180.000)</option>
+                            <option value="Wisuda Perguruan Tinggi (Rp 150.000)">Wisuda Perguruan Tinggi (Rp 150.000)</option>
+                            <option value="Graduation SMP-SMA (Rp 100.000)">Graduation SMP - SMA (Rp 100.000)</option>
+                            <option value="Bridesmaid &amp; Kondangan (Rp 120.000)">Bridesmaid &amp; Kondangan (Rp 120.000)</option>
+                            <option value="Prewedding (Rp 200.000)">Prewedding Photo (Rp 200.000)</option>
+                            <option value="Daily &amp; Party (Rp 100.000)">Daily &amp; Party (Rp 100.000)</option>
+                            <option value="Mom / Sister Brides (Rp 150.000)">Mom / Sister Brides (Rp 150.000)</option>
+                            <option value="Event &amp; Karnaval (Rp 120.000)">Event &amp; Karnaval (Rp 120.000)</option>
+                            <option value="Anak-Anak (Rp 50.000)">Anak-Anak (Rp 50.000)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso mb-1">Lokasi Acara *</label>
+                        <input type="text" id="wa-form-location" required
+                            placeholder="Contoh: Citra Raya Cluster Mulberry"
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-espresso mb-1">Catatan Tambahan (Opsional)</label>
+                    <textarea id="wa-form-notes" rows="3"
+                        placeholder="Contoh: Tambah softlens H-1 / Jam pengerjaan 06.00 WIB"
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-gold hover:bg-gold-hover text-white font-semibold py-3.5 rounded-2xl text-xs uppercase tracking-wider shadow-gold-glow transition-all btn-touch flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Kirim Format Booking ke WhatsApp</span>
+                </button>
+            </form>
+
+            <!-- Social Links -->
+            <div class="pt-6 border-t border-warm-nude flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-xs text-muted-brown">Ikuti kami di sosial media untuk update look terbaru:</div>
+                <div class="flex items-center gap-4">
+                    <a href="https://instagram.com" target="_blank" rel="noopener"
+                        class="w-9 h-9 rounded-full bg-warm-nude text-espresso flex items-center justify-center hover:bg-gold hover:text-white transition-colors">
+                        <i class="fa-brands fa-instagram text-base"></i>
+                    </a>
+                    <a href="https://tiktok.com" target="_blank" rel="noopener"
+                        class="w-9 h-9 rounded-full bg-warm-nude text-espresso flex items-center justify-center hover:bg-gold hover:text-white transition-colors">
+                        <i class="fa-brands fa-tiktok text-base"></i>
+                    </a>
+                    <a href="https://wa.me/62895361272040" target="_blank" rel="noopener"
+                        class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-colors">
+                        <i class="fa-brands fa-whatsapp text-base"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('wa-booking-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = (document.getElementById('wa-form-name') as HTMLInputElement).value;
+        const date = (document.getElementById('wa-form-date') as HTMLInputElement).value;
+        const service = (document.getElementById('wa-form-service') as HTMLSelectElement).value;
+        const location = (document.getElementById('wa-form-location') as HTMLInputElement).value;
+        const notes = (document.getElementById('wa-form-notes') as HTMLTextAreaElement).value || '-';
+
+        const text = `Halo%20AULIAAS_MAKEUP,%20saya%20ingin%20booking%20layanan:%0A- %2A'Nama'%2A:%20${encodeURIComponent(name)}%0A- %2A'Tanggal'%2A:%20${encodeURIComponent(date)}%0A- %2A'Layanan'%2A:%20${encodeURIComponent(service)}%0A- %2A'Lokasi'%2A:%20${encodeURIComponent(location)}%0A- %2A'Catatan'%2A:%20${encodeURIComponent(notes)}`;
+        window.open(`https://wa.me/62895361272040?text=${text}`, '_blank');
+    });
+</script>

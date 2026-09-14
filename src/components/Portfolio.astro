@@ -1,0 +1,130 @@
+---
+// Portfolio.astro — Section #portfolio: Filtered gallery grid with lightbox
+const portfolioItems = [
+    {
+        id: 1,
+        category: 'bridal',
+        img: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop',
+        alt: 'Engagement Makeup',
+        cat_label: 'Bridal & Tunangan',
+        title: 'Engagement Look — Soft Rose Glow',
+        desc: 'Sentuhan flawless natural anggun untuk lamaran',
+    },
+    {
+        id: 2,
+        category: 'graduation',
+        img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop',
+        alt: 'Wisuda Makeup',
+        cat_label: 'Wisuda & Sekolah',
+        title: 'Wisuda Perguruan Tinggi Look',
+        desc: 'Ringan, tidak berat di wajah, tahan panas seharian',
+    },
+    {
+        id: 3,
+        category: 'party',
+        img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop',
+        alt: 'Bridesmaid Makeup',
+        cat_label: 'Party & Event',
+        title: 'Bridesmaid Look — Nude Glam',
+        desc: 'Tampil menawan di pesta & pernikahan sahabat',
+    },
+    {
+        id: 4,
+        category: 'bridal',
+        img: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=800&auto=format&fit=crop',
+        alt: 'Prewedding Makeup',
+        cat_label: 'Bridal & Tunangan',
+        title: 'Prewedding Photo Makeup',
+        desc: 'Riasan HD kamera tahan sorotan lampu studio/outdoor',
+    },
+    {
+        id: 5,
+        category: 'graduation',
+        img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=800&auto=format&fit=crop',
+        alt: 'Graduation SMP SMA',
+        cat_label: 'Wisuda & Sekolah',
+        title: 'Graduation SMP/SMA Clean Girl',
+        desc: 'Makeup natural remaja, tidak berlebihan & tetap manis',
+    },
+    {
+        id: 6,
+        category: 'party',
+        img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop',
+        alt: 'Event Karnaval',
+        cat_label: 'Party & Event',
+        title: 'Pentas & Karnaval Special Look',
+        desc: 'Riasan tegas & berkarakter untuk acara panggung',
+    },
+];
+---
+
+<section id="portfolio" class="py-16 sm:py-24 bg-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
+            <span class="text-xs font-bold text-gold uppercase tracking-widest">Galeri Karya &amp; Hasil Makeup</span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso">Portofolio Kategori</h2>
+            <p class="text-muted-brown text-sm sm:text-base">Klik pada foto untuk memperbesar karya riasan kami.</p>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div class="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-4 mb-8">
+            <button class="port-tab active-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-espresso text-cream" data-cat="all">Semua Look</button>
+            <button class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="bridal">Bridal &amp; Tunangan</button>
+            <button class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="graduation">Wisuda &amp; Sekolah</button>
+            <button class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="party">Party &amp; Event</button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
+            {portfolioItems.map(item => (
+                <div
+                    class="port-item group relative aspect-[3/4] rounded-2xl overflow-hidden shadow-md cursor-pointer"
+                    data-category={item.category}
+                    data-img={item.img}
+                    data-title={item.title}
+                >
+                    <img
+                        src={item.img}
+                        alt={item.alt}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-espresso/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end text-white">
+                        <span class="text-[10px] uppercase font-bold text-blush tracking-wider">{item.cat_label}</span>
+                        <h3 class="font-serif text-lg font-bold">{item.title}</h3>
+                        <p class="text-xs text-cream/90">{item.desc}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<script>
+    // Portfolio filter
+    const tabs = document.querySelectorAll<HTMLElement>('.port-tab');
+    const items = document.querySelectorAll<HTMLElement>('.port-item');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const cat = tab.dataset.cat!;
+
+            tabs.forEach(t => {
+                t.className = 'port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white';
+            });
+            tab.className = 'port-tab active-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-espresso text-cream';
+
+            items.forEach(item => {
+                item.style.display = (cat === 'all' || item.dataset.category === cat) ? 'block' : 'none';
+            });
+        });
+    });
+
+    // Lightbox open on portfolio item click
+    items.forEach(item => {
+        item.addEventListener('click', () => {
+            const img = item.dataset.img!;
+            const title = item.dataset.title!;
+            window.dispatchEvent(new CustomEvent('openLightbox', { detail: { img, title } }));
+        });
+    });
+</script>

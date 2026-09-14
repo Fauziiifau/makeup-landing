@@ -1,0 +1,250 @@
+---
+// Modals.astro — All modal overlays: Lightbox, Review, Admin Login, Admin Dashboard, Calculator, Edit Testimonial, Toast
+---
+
+<!-- Lightbox Modal -->
+<div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/85 hidden items-center justify-center p-4">
+    <div class="max-w-3xl w-full bg-transparent relative flex flex-col items-center">
+        <button id="close-lightbox-btn" class="absolute -top-10 right-0 text-white text-2xl hover:text-gold">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="lightbox-img" src="" alt="Portfolio Large"
+            class="max-h-[80vh] w-auto rounded-2xl object-contain shadow-2xl">
+        <p id="lightbox-caption" class="text-white text-xs sm:text-sm font-serif mt-3 text-center"></p>
+    </div>
+</div>
+
+<!-- Review Submission Modal -->
+<div id="review-modal" class="fixed inset-0 z-50 bg-black/75 hidden items-center justify-center p-3 sm:p-4">
+    <div
+        class="max-w-md w-full bg-white rounded-3xl p-5 sm:p-7 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-warm-nude pb-3">
+            <div>
+                <h3 class="font-serif text-lg font-bold text-espresso">Tulis Ulasan &amp; Pengalaman</h3>
+                <p class="text-[11px] text-muted-brown">Bagikan ulasan Anda tentang layanan AULIAAS_MAKEUP</p>
+            </div>
+            <button id="close-review-btn" class="text-muted-brown hover:text-espresso text-lg p-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="review-form" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-espresso mb-1">Nama Lengkap *</label>
+                <input type="text" id="rev-name" required placeholder="Contoh: Dinda Rahmawati"
+                    class="w-full px-3 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-espresso mb-1">Layanan yang Dipilih *</label>
+                <select id="rev-service" required
+                    class="w-full px-3 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none">
+                    <option value="Tunangan (Engagement)">Tunangan (Engagement)</option>
+                    <option value="Wisuda (Perguruan Tinggi)">Wisuda (Perguruan Tinggi)</option>
+                    <option value="Graduation SMP - SMA">Graduation SMP - SMA</option>
+                    <option value="Bridesmaid &amp; Kondangan">Bridesmaid &amp; Kondangan</option>
+                    <option value="Prewedding Photo">Prewedding Photo</option>
+                    <option value="Daily &amp; Party">Daily &amp; Party</option>
+                    <option value="Mom / Sister Brides">Mom / Sister Brides</option>
+                    <option value="Event &amp; Karnaval">Event &amp; Karnaval</option>
+                    <option value="Anak-Anak">Anak-Anak</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-espresso mb-1">Rating Kepuasan *</label>
+                <div class="flex items-center gap-2 text-2xl text-amber-400 cursor-pointer" id="star-selector">
+                    <i class="fa-solid fa-star star-btn" data-rating="1"></i>
+                    <i class="fa-solid fa-star star-btn" data-rating="2"></i>
+                    <i class="fa-solid fa-star star-btn" data-rating="3"></i>
+                    <i class="fa-solid fa-star star-btn" data-rating="4"></i>
+                    <i class="fa-solid fa-star star-btn" data-rating="5"></i>
+                </div>
+                <input type="hidden" id="rev-rating" value="5">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-espresso mb-1">Isi Ulasan / Testimoni *</label>
+                <textarea id="rev-content" required rows="4"
+                    placeholder="Ceritakan kepuasan hasil makeup Anda..."
+                    class="w-full px-3 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none"></textarea>
+            </div>
+
+            <div class="p-3 bg-warm-nude/40 rounded-xl text-[11px] text-muted-brown flex items-start gap-2">
+                <i class="fa-solid fa-circle-info text-gold text-xs mt-0.5"></i>
+                <span>Ulasan Anda akan ditinjau oleh tim Admin sebelum ditampilkan di halaman utama.</span>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-espresso hover:bg-espresso/90 text-cream font-semibold py-3 rounded-xl text-xs shadow-md btn-touch">
+                Kirim Ulasan Saya
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Admin Login Modal -->
+<div id="admin-login-modal"
+    class="fixed inset-0 z-50 bg-black/75 hidden items-center justify-center p-3 sm:p-4">
+    <div class="max-w-sm w-full bg-white rounded-3xl p-6 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b border-warm-nude pb-3">
+            <h3 class="font-serif text-lg font-bold text-espresso">Login Admin Moderasi</h3>
+            <button id="close-admin-login-btn" class="text-muted-brown hover:text-espresso text-lg p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="admin-login-form" class="space-y-3">
+            <div>
+                <label class="block text-xs font-semibold text-espresso mb-1">Password Admin:</label>
+                <input type="password" id="admin-pass-input" placeholder="Password default: admin123"
+                    class="w-full px-3 py-2 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none"
+                    required>
+            </div>
+            <button type="submit"
+                class="w-full bg-gold hover:bg-gold-hover text-white py-2.5 rounded-xl text-xs font-semibold shadow-md btn-touch">
+                Masuk Dashboard
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Admin Dashboard Modal -->
+<div id="admin-dashboard-modal"
+    class="fixed inset-0 z-50 bg-black/80 hidden items-center justify-center p-3 sm:p-4">
+    <div
+        class="max-w-3xl w-full bg-white rounded-3xl p-5 sm:p-7 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-warm-nude pb-3">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span
+                        class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold text-[10px] rounded-full uppercase">Admin
+                        Logged In</span>
+                    <h3 class="font-serif text-lg sm:text-xl font-bold text-espresso">Dashboard Moderasi
+                        Testimoni</h3>
+                </div>
+                <p class="text-xs text-muted-brown">Kelola ulasan masuk (Setujui, Edit, atau Hapus)</p>
+            </div>
+            <button id="close-admin-dashboard-btn" class="text-muted-brown hover:text-espresso text-lg p-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Tab Switcher -->
+        <div class="flex items-center gap-2 border-b border-warm-nude pb-2">
+            <button id="tab-btn-pending"
+                class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-espresso text-white">
+                Menunggu Persetujuan (<span id="count-pending">0</span>)
+            </button>
+            <button id="tab-btn-approved"
+                class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-warm-nude text-espresso">
+                Disetujui / Tayang (<span id="count-approved">0</span>)
+            </button>
+        </div>
+
+        <div id="admin-pending-list" class="space-y-3"></div>
+        <div id="admin-approved-list" class="space-y-3 hidden"></div>
+    </div>
+</div>
+
+<!-- Calculator Modal -->
+<div id="calc-modal" class="fixed inset-0 z-50 bg-black/75 hidden items-center justify-center p-3 sm:p-4">
+    <div class="max-w-md w-full bg-white rounded-3xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-warm-nude pb-3">
+            <h3 class="font-serif text-lg font-bold text-espresso">Kalkulator Estimasi Biaya</h3>
+            <button id="close-calc-btn" class="text-muted-brown hover:text-espresso text-lg p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="space-y-4 text-xs">
+            <div>
+                <label class="block font-semibold mb-1">Pilih Layanan:</label>
+                <select id="calc-service" class="w-full px-3 py-2 rounded-xl border border-warm-nude text-xs">
+                    <option value="50000">Anak-Anak (+15 Bulumata) — Rp 50.000</option>
+                    <option value="100000">Graduation SMP - SMA — Rp 100.000</option>
+                    <option value="100000">Daily &amp; Party — Rp 100.000</option>
+                    <option value="120000">Bridesmaid &amp; Kondangan — Rp 120.000</option>
+                    <option value="120000">Event &amp; Karnaval — Rp 120.000</option>
+                    <option value="150000" selected>Wisuda Perguruan Tinggi — Rp 150.000</option>
+                    <option value="150000">Mom / Sister Brides — Rp 150.000</option>
+                    <option value="180000">Tunangan (Engagement) — Rp 180.000</option>
+                    <option value="200000">Prewedding Photo — Rp 200.000</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Jumlah Pax Orang:</label>
+                <div class="flex items-center gap-2">
+                    <button id="calc-pax-minus"
+                        class="w-8 h-8 rounded-lg bg-warm-nude font-bold text-espresso">-</button>
+                    <input type="number" id="calc-pax" value="1" min="1" max="50"
+                        class="w-full px-3 py-2 text-center rounded-xl border border-warm-nude text-xs">
+                    <button id="calc-pax-plus"
+                        class="w-8 h-8 rounded-lg bg-warm-nude font-bold text-espresso">+</button>
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-warm-nude">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="calc-softlens" class="rounded text-gold focus:ring-gold">
+                    <span>Tambah Softlens Add-on (+Rp 35.000 / pasang)</span>
+                </label>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-cream border border-warm-nude space-y-1">
+                <div class="text-[11px] text-muted-brown">Total Estimasi Sementara:</div>
+                <div class="font-serif text-2xl font-bold text-espresso" id="calc-total-display">Rp 150.000</div>
+                <div class="text-[10px] text-muted-brown">*Belum termasuk ongkir transport luar Citra Raya</div>
+            </div>
+
+            <button id="calc-send-wa-btn"
+                class="w-full bg-gold hover:bg-gold-hover text-white py-3 rounded-xl font-semibold shadow-md btn-touch flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span>Lanjutkan Booking via WhatsApp</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Testimonial Modal (Admin) -->
+<div id="edit-modal" class="fixed inset-0 z-50 bg-black/75 hidden items-center justify-center p-3 sm:p-4">
+    <div class="max-w-md w-full bg-white rounded-3xl p-6 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b border-warm-nude pb-3">
+            <h3 class="font-serif text-lg font-bold text-espresso">Edit Testimoni</h3>
+            <button id="close-edit-btn" class="text-muted-brown hover:text-espresso text-lg p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <form id="edit-form" class="space-y-3">
+            <input type="hidden" id="edit-id">
+            <div>
+                <label class="block text-xs font-semibold text-espresso mb-1">Nama</label>
+                <input type="text" id="edit-name"
+                    class="w-full px-3 py-2 rounded-xl border border-warm-nude text-xs" required>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-espresso mb-1">Layanan</label>
+                <input type="text" id="edit-service"
+                    class="w-full px-3 py-2 rounded-xl border border-warm-nude text-xs" required>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-espresso mb-1">Rating (1 - 5)</label>
+                <input type="number" id="edit-rating" min="1" max="5"
+                    class="w-full px-3 py-2 rounded-xl border border-warm-nude text-xs" required>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-espresso mb-1">Isi Ulasan</label>
+                <textarea id="edit-content" rows="3"
+                    class="w-full px-3 py-2 rounded-xl border border-warm-nude text-xs" required></textarea>
+            </div>
+            <button type="submit"
+                class="w-full bg-gold hover:bg-gold-hover text-white py-2.5 rounded-xl text-xs font-semibold shadow-md btn-touch">
+                Simpan Perubahan
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Toast Notification Container -->
+<div id="toast-container" class="fixed top-20 right-5 z-50 flex flex-col gap-2"></div>

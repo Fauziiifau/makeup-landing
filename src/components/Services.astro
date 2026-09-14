@@ -1,0 +1,41 @@
+---
+// Services.astro — Section #services: 4 key advantage cards
+const advantages = [
+    {
+        icon: 'fa-eye',
+        title: 'FREE Bulu Mata',
+        desc: 'Setiap pengerjaan makeup sudah termasuk pemasangan bulu mata gratis tanpa biaya tambahan.',
+    },
+    {
+        icon: 'fa-sparkles',
+        title: 'FREE Simple Hijab Do',
+        desc: 'Penataan hijab simpel yang rapi & elegan sudah termasuk dalam paket riasan Anda.',
+    },
+    {
+        icon: 'fa-truck-fast',
+        title: 'Free Transport Citra Raya',
+        desc: 'Bebas biaya ongkir transportasi untuk pengerjaan lokasi di dalam kawasan Citra Raya.',
+    },
+    {
+        icon: 'fa-gem',
+        title: 'Produk Original & Higienis',
+        desc: 'Menggunakan kosmetik bermerek original dan kuas/spons tersterilisasi aman untuk kulit.',
+    },
+];
+---
+
+<section id="services" class="py-14 sm:py-16 bg-warm-nude/40 border-y border-warm-nude">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center sm:text-left">
+            {advantages.map(adv => (
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gold/20 flex flex-col items-center sm:items-start space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-warm-nude text-gold flex items-center justify-center text-xl">
+                        <i class={`fa-solid ${adv.icon}`}></i>
+                    </div>
+                    <h4 class="font-serif font-bold text-espresso text-base">{adv.title}</h4>
+                    <p class="text-xs text-muted-brown leading-relaxed">{adv.desc}</p>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>

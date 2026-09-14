@@ -1,0 +1,111 @@
+---
+// Navbar.astro — Sticky glassmorphic navigation with mobile drawer
+---
+
+<header id="main-navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center gap-2.5 group">
+            <div
+                class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-warm-nude border border-gold flex items-center justify-center text-gold font-serif font-bold text-base sm:text-lg group-hover:scale-105 transition-transform">
+                A
+            </div>
+            <div class="flex flex-col">
+                <span
+                    class="font-serif text-lg sm:text-2xl font-bold tracking-wider text-espresso">AULIAAS_MAKEUP</span>
+                <span
+                    class="text-[9px] sm:text-[10px] tracking-widest text-muted-brown uppercase font-medium">Professional
+                    Beauty Artist</span>
+            </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center space-x-6 lg:space-x-8">
+            <a href="#about"
+                class="text-xs lg:text-sm font-medium text-espresso hover:text-gold transition-colors">Tentang</a>
+            <a href="#portfolio"
+                class="text-xs lg:text-sm font-medium text-espresso hover:text-gold transition-colors">Portofolio</a>
+            <a href="#pricing"
+                class="text-xs lg:text-sm font-medium text-espresso hover:text-gold transition-colors">Daftar
+                Harga</a>
+            <a href="#terms"
+                class="text-xs lg:text-sm font-medium text-espresso hover:text-gold transition-colors">Syarat &
+                Ketentuan</a>
+            <a href="#testimonials"
+                class="text-xs lg:text-sm font-medium text-espresso hover:text-gold transition-colors">Ulasan</a>
+            <button id="nav-admin-btn"
+                class="text-xs font-semibold text-muted-brown hover:text-gold transition-colors flex items-center gap-1.5 bg-warm-nude/50 px-3 py-1.5 rounded-full border border-warm-nude">
+                <i class="fa-solid fa-user-shield text-gold"></i> Admin
+            </button>
+        </nav>
+
+        <!-- Desktop WhatsApp Action Button -->
+        <div class="hidden md:flex items-center gap-3">
+            <a href="https://wa.me/62895361272040?text=Halo%20AULIAAS_MAKEUP,%20saya%20ingin%20konsultasi%20booking%20makeup."
+                target="_blank" rel="noopener"
+                class="bg-gold hover:bg-gold-hover text-white px-5 py-2.5 rounded-full text-xs font-semibold shadow-gold-glow flex items-center gap-2 btn-touch">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>Book via WhatsApp</span>
+            </a>
+        </div>
+
+        <!-- Mobile Hamburger Button -->
+        <button id="mobile-menu-btn" aria-label="Toggle Menu" class="md:hidden p-2 text-espresso focus:outline-none">
+            <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-menu"
+        class="hidden md:hidden bg-cream/95 backdrop-blur-md border-b border-warm-nude px-6 py-6 space-y-4">
+        <a href="#about" class="mobile-nav-link block text-sm font-semibold text-espresso py-1">Tentang Kami</a>
+        <a href="#portfolio" class="mobile-nav-link block text-sm font-semibold text-espresso py-1">Portofolio</a>
+        <a href="#pricing" class="mobile-nav-link block text-sm font-semibold text-espresso py-1">Daftar Harga Service</a>
+        <a href="#terms" class="mobile-nav-link block text-sm font-semibold text-espresso py-1">Syarat & Ketentuan</a>
+        <a href="#testimonials" class="mobile-nav-link block text-sm font-semibold text-espresso py-1">Ulasan Client</a>
+        <button id="mobile-admin-btn"
+            class="w-full text-left text-sm font-semibold text-gold py-2 border-t border-warm-nude flex items-center gap-2">
+            <i class="fa-solid fa-lock"></i> Login Admin Moderasi
+        </button>
+        <a href="https://wa.me/62895361272040?text=Halo%20AULIAAS_MAKEUP,%20saya%20ingin%20booking%20layanan."
+            target="_blank" rel="noopener"
+            class="w-full bg-gold text-white text-center py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-md">
+            <i class="fa-brands fa-whatsapp"></i> Chat WhatsApp Sekarang
+        </a>
+    </div>
+</header>
+
+<script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+
+    function toggleMobileMenu() {
+        mobileMenu?.classList.toggle('hidden');
+        if (menuIcon) {
+            menuIcon.className = mobileMenu?.classList.contains('hidden')
+                ? 'fa-solid fa-bars text-xl'
+                : 'fa-solid fa-xmark text-xl';
+        }
+    }
+
+    mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+
+    // Close mobile menu on nav link click
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu?.classList.add('hidden');
+            if (menuIcon) menuIcon.className = 'fa-solid fa-bars text-xl';
+        });
+    });
+
+    // Admin buttons (dispatches event that app.js listens to)
+    document.getElementById('nav-admin-btn')?.addEventListener('click', () => {
+        window.dispatchEvent(new CustomEvent('openAdminLogin'));
+    });
+    document.getElementById('mobile-admin-btn')?.addEventListener('click', () => {
+        toggleMobileMenu();
+        window.dispatchEvent(new CustomEvent('openAdminLogin'));
+    });
+</script>

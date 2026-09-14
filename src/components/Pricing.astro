@@ -1,0 +1,156 @@
+---
+// Pricing.astro — Section #pricing: 9 service pricing cards in a 3x3 grid
+
+interface PricingCard {
+    badge: string;
+    tag?: string;
+    tagStyle?: string;
+    title: string;
+    desc: string;
+    price: string;
+    features: string[];
+    waText: string;
+    btnClass: string;
+    featured?: boolean;
+}
+
+const pricingCards: PricingCard[] = [
+    {
+        badge: 'Kids Makeup',
+        tag: 'Hemat',
+        tagStyle: 'text-xs font-semibold text-gold',
+        title: 'Anak-Anak (+15 Bulumata)',
+        desc: 'Layanan riasan khusus anak-anak (sudah termasuk +15 bulu mata).',
+        price: 'Rp 50.000',
+        features: ['Makeup halus & aman untuk anak', 'Pemasangan +15 pasang bulu mata', 'Penataan tatanan simpel'],
+        waText: 'Halo%20AULIAAS_MAKEUP,%20saya%20tertarik%20booking%20layanan%20Anak-Anak%20(Rp%2050.000)',
+        btnClass: 'w-full bg-espresso hover:bg-gold text-white text-center py-3 rounded-2xl text-xs font-semibold block transition-colors shadow-sm btn-touch',
+    },
+    {
+        badge: 'School Event',
+        tag: 'Populer',
+        tagStyle: 'text-xs font-semibold text-gold',
+        title: 'Graduation SMP - SMA',
+        desc: 'Layanan riasan wisuda & kelulusan sekolah tingkat SMP - SMA.',
+        price: 'Rp 100.000',
+        features: ['Look natural fresh & glowing', 'GRATIS pasang bulu mata', 'GRATIS simple hijab do / hairdo'],
+        waText: 'Halo%20AULIAAS_MAKEUP,%20saya%20tertarik%20booking%20layanan%20Graduation%20SMP-SMA%20(Rp%20100.000)',
+        btnClass: 'w-full bg-espresso hover:bg-gold text-white text-center py-3 rounded-2xl text-xs font-semibold block transition-colors shadow-sm btn-touch',
+    },
+    {
+        badge: 'Casual & Event',
+        title: 'Daily & Party',
+        desc: 'Riasan kasual harian atau untuk menghadiri acara pesta.',
+        price: 'Rp 100.000',
+        features: ['Ringan & tahan seharian', 'GRATIS pasang bulu mata', 'Penataan hijab/rambut simpel'],
+        waText: 'Halo%20AULIAAS_MAKEUP,%20saya%20tertarik%20booking%20layanan%20Daily%20%26%20Party%20(Rp%20100.000)',
+        btnClass: 'w-full bg-espresso hover:bg-gold text-white text-center py-3 rounded-2xl text-xs font-semibold block transition-colors shadow-sm btn-touch',
+    },
+    {
+        badge: 'Wedding Party',
+        title: 'Bridesmaid & Kondangan',
+        desc: 'Riasan pengiring pengantin (bridesmaid) atau tamu kondangan.',
+        price: 'Rp 120.000',
+        features: ['Soft Flawless Look', 'GRATIS pasang bulu mata', 'GRATIS simple hijab do'],
+        waText: 'Halo%20AULIAAS_MAKEUP,%20saya%20tertarik%20booking%20layanan%20Bridesmaid%20%26%20Kondangan%20(Rp%20120.000)',
+        btnClass: 'w-full bg-espresso hover:bg-gold text-white text-center py-3 rounded-2xl text-xs font-semibold block transition-colors shadow-sm btn-touch',
+    },
+    {
+        badge: 'Festival',
+        title: 'Event & Karnaval',
+        desc: 'Riasan khusus untuk pentas, acara spesial, atau festival karnaval.',
+        price: 'Rp 120.000',
+        features: ['Character & Bold Glam', 'GRATIS pasang bulu mata', 'Penyesuaian tema kostum'],
+        waText: 'Halo%20AULIAAS_MAKEUP,%20saya%20tertarik%20booking%20layanan%20Event%20%26%20Karnaval%20(Rp%20120.000)',
+        btnClass: 'w-full bg-espresso hover:bg-gold text-white text-center py-3 rounded-2xl text-xs font-semibold block transition-colors shadow-sm btn-touch',
+    },
+    {
+        badge: 'Graduation',
+        title: 'Wisuda Perguruan Tinggi',
+        desc: 'Layanan riasan wisuda untuk mahasiswi perguruan tinggi.',
+        price: 'Rp 150.000',
+        features: ['Natural Glowing Finish', 'GRATIS pasang bulu mata', 'GRATIS simple hijab do / hairdo'],
+        waText: 'Halo%20AULIAAS_MAKEUP,%20saya%20tertarik%20booking%20layanan%20Wisuda%20Perguruan%20Tinggi%20(Rp%20150.000)',
+        btnClass: 'w-full bg-espresso hover:bg-gold text-white text-center py-3 rounded-2xl text-xs font-semibold block transition-colors shadow-sm btn-touch',
+    },
+    {
+        badge: 'Family Bridal',
+        title: 'Mom / Sister Brides',
+        desc: 'Layanan riasan khusus ibu atau saudari pengantin.',
+        price: 'Rp 150.000',
+        features: ['Mature Elegant Look', 'GRATIS pasang bulu mata', 'GRATIS simple hijab do'],
+        waText: 'Halo%20AULIAAS_MAKEUP,%20saya%20tertarik%20booking%20layanan%20Mom%20%2F%20Sister%20Brides%20(Rp%20150.000)',
+        btnClass: 'w-full bg-espresso hover:bg-gold text-white text-center py-3 rounded-2xl text-xs font-semibold block transition-colors shadow-sm btn-touch',
+    },
+    {
+        badge: 'Engagement',
+        featured: true,
+        title: 'Tunangan (Engagement)',
+        desc: 'Riasan spesial untuk hari lamaran / pertunangan yang berkesan.',
+        price: 'Rp 180.000',
+        features: ['Soft Glam Elegant Finish', 'GRATIS pasang bulu mata', 'GRATIS simple hijab do'],
+        waText: 'Halo%20AULIAAS_MAKEUP,%20saya%20tertarik%20booking%20layanan%20Tunangan%20(Rp%20180.000)',
+        btnClass: 'w-full bg-gold hover:bg-gold-hover text-white text-center py-3 rounded-2xl text-xs font-semibold block transition-colors shadow-gold-glow btn-touch',
+    },
+    {
+        badge: 'Photoshoot',
+        title: 'Prewedding',
+        desc: 'Layanan riasan untuk sesi pemotretan pre-wedding.',
+        price: 'Rp 200.000',
+        features: ['High Definition Camera Finish', 'GRATIS pasang bulu mata', 'GRATIS simple hijab do / hairdo'],
+        waText: 'Halo%20AULIAAS_MAKEUP,%20saya%20tertarik%20booking%20layanan%20Prewedding%20(Rp%20200.000)',
+        btnClass: 'w-full bg-espresso hover:bg-gold text-white text-center py-3 rounded-2xl text-xs font-semibold block transition-colors shadow-sm btn-touch',
+    },
+];
+---
+
+<section id="pricing" class="py-16 sm:py-24 bg-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
+            <span class="text-xs font-bold text-gold uppercase tracking-widest">Rate Card Transparan &amp; Terjangkau</span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso">Daftar Paket Harga Services</h2>
+            <p class="text-muted-brown text-sm sm:text-base">Pilih paket makeup yang sesuai kebutuhan Anda. Semua paket sudah termasuk gratis pasang bulu mata &amp; simple hijab do.</p>
+        </div>
+
+        <!-- 3x3 Responsive Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {pricingCards.map(card => (
+                <div class={`luxury-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between${card.featured ? ' ring-2 ring-gold/50' : ''}`}>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full bg-warm-nude text-espresso text-[10px] font-bold uppercase tracking-wider">{card.badge}</span>
+                            {card.tag && <span class={card.tagStyle}>{card.tag}</span>}
+                            {card.featured && <span class="text-xs font-semibold text-gold">★ Best Seller</span>}
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-xl font-bold text-espresso">{card.title}</h3>
+                            <p class="text-xs text-muted-brown mt-1">{card.desc}</p>
+                        </div>
+                        <div class="pt-2 border-t border-warm-nude">
+                            <span class="text-xs text-muted-brown">Mulai dari</span>
+                            <div class="font-serif text-2xl font-bold text-espresso">{card.price} <span class="text-xs font-sans font-normal text-muted-brown">/ pax</span></div>
+                        </div>
+                        <ul class="text-xs text-espresso/90 space-y-2 pt-2">
+                            {card.features.map(f => (
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-check text-gold text-xs"></i>
+                                    {f}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4">
+                        <a
+                            href={`https://wa.me/62895361272040?text=${card.waText}`}
+                            target="_blank"
+                            rel="noopener"
+                            class={card.btnClass}
+                        >
+                            Pesan Paket Ini
+                        </a>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,145 @@
+---
+// Terms.astro — Section #terms: T&C list + interactive transport fee estimator
+---
+
+<section id="terms" class="py-16 sm:py-24 bg-warm-nude/30 border-y border-warm-nude">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12 space-y-2">
+            <span class="text-xs font-bold text-gold uppercase tracking-widest">Ketentuan Pemesanan</span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso">Syarat &amp; Ketentuan Layanan</h2>
+            <p class="text-muted-brown text-sm sm:text-base">Harap membaca syarat dan ketentuan berikut untuk kelancaran booking jadwal Anda.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+
+            <!-- Terms List Card -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gold/30 space-y-6">
+                <div class="flex items-center gap-3 border-b border-warm-nude pb-4">
+                    <div class="w-10 h-10 rounded-full bg-warm-nude text-gold flex items-center justify-center font-bold text-lg">📋</div>
+                    <div>
+                        <h3 class="font-serif text-lg font-bold text-espresso">Ringkasan Ketentuan</h3>
+                        <p class="text-[11px] text-muted-brown">Standard Operating Procedure AULIAAS_MAKEUP</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 text-xs sm:text-sm text-espresso">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-circle-exclamation text-rose-500 mt-1"></i>
+                        <div>
+                            <strong class="font-bold text-espresso">Ketentuan Down Payment (DP):</strong>
+                            <p class="text-muted-brown mt-0.5">Booking jadwal wajib menyertakan DP sebesar <span class="font-semibold text-espresso">30% dari total biaya</span>. DP akan hangus apabila pesanan dibatalkan (cancel) oleh pihak klien.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-gift text-gold mt-1"></i>
+                        <div>
+                            <strong class="font-bold text-espresso">Fasilitas Gratis (Included):</strong>
+                            <p class="text-muted-brown mt-0.5">Setiap pemesanan layanan sudah <span class="font-semibold text-espresso">GRATIS Pasang Bulu Mata</span> dan <span class="font-semibold text-espresso">Tata Hijab Simpel (Simple Hijab Do)</span>.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-eye text-indigo-500 mt-1"></i>
+                        <div>
+                            <strong class="font-bold text-espresso">Softlens Add-on:</strong>
+                            <p class="text-muted-brown mt-0.5">Pemesanan softlens dikenakan biaya tambahan mulai dari <span class="font-semibold text-espresso">Rp 35.000</span> (wajib diajukan minimal H-1 sebelum acara).</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-location-dot text-emerald-500 mt-1"></i>
+                        <div>
+                            <strong class="font-bold text-espresso">Area Transportasi:</strong>
+                            <p class="text-muted-brown mt-0.5"><span class="font-semibold text-emerald-700">Free Bebas Ongkir Transport</span> untuk lokasi dalam Area Citra Raya. Untuk luar area, dikenakan <span class="font-semibold text-espresso">Rp 20.000 / 5 km</span>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transport Fee Estimator Card -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gold/30 flex flex-col justify-between space-y-6">
+                <div>
+                    <div class="flex items-center gap-3 border-b border-warm-nude pb-4 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-warm-nude text-gold flex items-center justify-center font-bold text-lg">🚗</div>
+                        <div>
+                            <h3 class="font-serif text-lg font-bold text-espresso">Simulasi Estimasi Biaya Transport</h3>
+                            <p class="text-[11px] text-muted-brown">Hitung tambahan biaya lokasi luar Citra Raya</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-espresso mb-1">Pilih Lokasi Acara:</label>
+                            <select id="transport-location-type"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none">
+                                <option value="inside">Dalam Area Citra Raya (FREE Ongkir)</option>
+                                <option value="outside">Luar Area Citra Raya (Rp 20.000 / 5 km)</option>
+                            </select>
+                        </div>
+
+                        <div id="km-input-container" class="hidden space-y-2">
+                            <label class="block text-xs font-semibold text-espresso">Jarak Estimasi dari Citra Raya (KM):</label>
+                            <input type="number" id="transport-km" min="1" max="100" value="5"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none">
+                            <div class="flex gap-2 pt-1">
+                                <button class="km-preset px-3 py-1 bg-warm-nude rounded-lg text-[11px] text-espresso font-semibold" data-km="5">5 KM</button>
+                                <button class="km-preset px-3 py-1 bg-warm-nude rounded-lg text-[11px] text-espresso font-semibold" data-km="10">10 KM</button>
+                                <button class="km-preset px-3 py-1 bg-warm-nude rounded-lg text-[11px] text-espresso font-semibold" data-km="15">15 KM</button>
+                                <button class="km-preset px-3 py-1 bg-warm-nude rounded-lg text-[11px] text-espresso font-semibold" data-km="20">20 KM</button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-warm-nude/40 border border-warm-nude space-y-1">
+                            <div class="text-[11px] text-muted-brown">Estimasi Biaya Ongkir Transportasi:</div>
+                            <div class="font-serif text-2xl font-bold text-espresso" id="transport-fee-result">Rp 0 (GRATIS)</div>
+                            <div class="text-[10px] text-muted-brown" id="transport-fee-note">Lokasi di dalam Citra Raya tidak dikenakan tambahan ongkir.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/62895361272040?text=Halo%20AULIAAS_MAKEUP,%20saya%20ingin%20tanya%20ongkir%20transport%20ke%20lokasi%20saya."
+                    target="_blank" rel="noopener"
+                    class="w-full bg-espresso hover:bg-gold text-white text-center py-3 rounded-2xl text-xs font-semibold transition-colors flex items-center justify-center gap-2 btn-touch">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>Konfirmasi Lokasi via WhatsApp</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    const locationSelect = document.getElementById('transport-location-type') as HTMLSelectElement;
+    const kmContainer = document.getElementById('km-input-container');
+    const kmInput = document.getElementById('transport-km') as HTMLInputElement;
+    const feeResult = document.getElementById('transport-fee-result');
+    const feeNote = document.getElementById('transport-fee-note');
+
+    function calculateTransportFee() {
+        if (!locationSelect || !feeResult || !feeNote) return;
+        if (locationSelect.value === 'inside') {
+            kmContainer?.classList.add('hidden');
+            feeResult.textContent = 'Rp 0 (GRATIS)';
+            feeNote.textContent = 'Lokasi di dalam Citra Raya tidak dikenakan tambahan ongkir.';
+        } else {
+            kmContainer?.classList.remove('hidden');
+            const km = parseFloat(kmInput?.value) || 0;
+            const multiplier = Math.ceil(km / 5);
+            const total = multiplier * 20000;
+            feeResult.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+            feeNote.textContent = `Rincian: ${km} KM (dihitung ${multiplier}x kelipatan 5 KM x Rp 20.000)`;
+        }
+    }
+
+    locationSelect?.addEventListener('change', calculateTransportFee);
+    kmInput?.addEventListener('input', calculateTransportFee);
+
+    document.querySelectorAll<HTMLButtonElement>('.km-preset').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (kmInput) kmInput.value = btn.dataset.km!;
+            calculateTransportFee();
+        });
+    });
+</script>
