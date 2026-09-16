@@ -454,37 +454,146 @@ function renderAll() {
 // Calculator
 // ──────────────────────────────────────────
 function runCalculator() {
-    const servicePrice = parseInt((document.getElementById('calc-service') as HTMLSelectElement).value) || 0;
-    const pax = Math.max(1, parseInt((document.getElementById('calc-pax') as HTMLInputElement).value) || 1);
-    const hasSoftlens = (document.getElementById('calc-softlens') as HTMLInputElement).checked;
-    let total = servicePrice * pax;
-    if (hasSoftlens) total += 35000 * pax;
-    document.getElementById('calc-total-display')!.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+    const serviceSelect = document.getElementById('calc-service') as HTMLSelectElement | null;
+    const paxInput = document.getElementById('calc-pax') as HTMLInputElement | null;
+    const softlensInput = document.getElementById('calc-softlens') as HTMLInputElement | null;
+    const areaSelect = document.getElementById('calc-transport-area') as HTMLSelectElement | null;
+    const kmContainer = document.getElementById('calc-km-container');
+    const kmInput = document.getElementById('calc-km-input') as HTMLInputElement | null;
+    const breakdownDetails = document.getElementById('calc-breakdown-details');
+    const transportDisplay = document.getElementById('calc-transport-display');
+    const totalDisplay = document.getElementById('calc-total-display');
+    const noteDisplay = document.getElementById('calc-note-display');
+
+    if (!serviceSelect || !paxInput || !totalDisplay) return;
+
+    const servicePrice = parseInt(serviceSelect.value) || 0;
+    const pax = Math.max(1, parseInt(paxInput.value) || 1);
+    const hasSoftlens = softlensInput?.checked ?? false;
+    const isOutside = areaSelect?.value === 'outside';
+
+    let transportFee = 0;
+    let km = 3;
+
+    if (isOutside) {
+        kmContainer?.classList.remove('hidden');
+        km = Math.max(1, parseFloat(kmInput?.value || '3') || 3);
+        const multiplier = Math.ceil(km / 3);
+        transportFee = multiplier * 20000;
+        if (transportDisplay) {
+            transportDisplay.className = 'font-semibold text-espresso';
+            transportDisplay.textContent = `Rp ${transportFee.toLocaleString('id-ID')} (${km} KM)`;
+        }
+        if (noteDisplay) {
+            noteDisplay.textContent = `*Luar Citra Raya: ${km} KM (${multiplier}x kelipatan 3 KM @ Rp 20.000)`;
+        }
+    } else {
+        kmContainer?.classList.add('hidden');
+        transportFee = 0;
+        if (transportDisplay) {
+            transportDisplay.className = 'font-semibold text-emerald-700';
+            transportDisplay.textContent = 'Rp 0 (FREE Ongkir)';
+        }
+        if (noteDisplay) {
+            noteDisplay.textContent = '*Gratis ongkir untuk Citra Raya & sekitarnya maks. 3 km';
+        }
+    }
+
+    const serviceTotal = servicePrice * pax;
+    const softlensTotal = hasSoftlens ? 35000 * pax : 0;
+    const grandTotal = serviceTotal + softlensTotal + transportFee;
+
+    if (breakdownDetails) {
+        const parts = [`${pax} pax x Rp ${(servicePrice).toLocaleString('id-ID')}`];
+        if (hasSoftlens) parts.push(`Softlens (+Rp ${(softlensTotal).toLocaleString('id-ID')})`);
+        breakdownDetails.textContent = parts.join(' + ');
+    }
+
+    totalDisplay.textContent = `Rp ${grandTotal.toLocaleString('id-ID')}`;
 }
 
 document.getElementById('calc-service')?.addEventListener('change', runCalculator);
 document.getElementById('calc-pax')?.addEventListener('input', runCalculator);
 document.getElementById('calc-softlens')?.addEventListener('change', runCalculator);
+document.getElementById('calc-transport-area')?.addEventListener('change', runCalculator);
+document.getElementById('calc-km-input')?.addEventListener('input', runCalculator);
+
+document.querySelectorAll<HTMLButtonElement>('.calc-km-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const kmInput = document.getElementById('calc-km-input') as HTMLInputElement | null;
+        if (kmInput && btn.dataset.km) {
+            kmInput.value = btn.dataset.km;
+            runCalculator();
+        }
+    });
+});
 
 document.getElementById('calc-pax-minus')?.addEventListener('click', () => {
     const input = document.getElementById('calc-pax') as HTMLInputElement;
-    input.value = String(Math.max(1, parseInt(input.value) - 1));
-    runCalculator();
+    if (input) {
+        input.value = String(Math.max(1, parseInt(input.value || '1') - 1));
+        runCalculator();
+    }
 });
 document.getElementById('calc-pax-plus')?.addEventListener('click', () => {
     const input = document.getElementById('calc-pax') as HTMLInputElement;
-    input.value = String(parseInt(input.value) + 1);
-    runCalculator();
+    if (input) {
+        input.value = String(parseInt(input.value || '1') + 1);
+        runCalculator();
+    }
 });
 
-document.getElementById('calc-send-wa-btn')?.addEventListener('click', () => {
-    const sel = document.getElementById('calc-service') as HTMLSelectElement;
-    const serviceText = sel.options[sel.selectedIndex].text;
-    const pax = (document.getElementById('calc-pax') as HTMLInputElement).value;
-    const softlens = (document.getElementById('calc-softlens') as HTMLInputElement).checked ? 'Ya (+Rp 35k)' : 'Tidak';
-    const total = document.getElementById('calc-total-display')!.textContent;
-    const text = `Halo AULIAAS_MAKEUP, saya ingin booking melalui Kalkulator Web:%0A- Layanan: ${encodeURIComponent(serviceText)}%0A- Jumlah: ${pax} pax%0A- Softlens Add-on: ${softlens}%0A- Estimasi Total: ${encodeURIComponent(total || '')}`;
-    window.open(`https://wa.me/62895361272040?text=${text}`, '_blank');
+// Navigate from Calculator to Konsultasi & Reservasi section (#contact)
+document.getElementById('calc-continue-btn')?.addEventListener('click', () => {
+    const serviceSelect = document.getElementById('calc-service') as HTMLSelectElement | null;
+    const paxInput = document.getElementById('calc-pax') as HTMLInputElement | null;
+    const softlensInput = document.getElementById('calc-softlens') as HTMLInputElement | null;
+    const areaSelect = document.getElementById('calc-transport-area') as HTMLSelectElement | null;
+    const kmInput = document.getElementById('calc-km-input') as HTMLInputElement | null;
+    const totalDisplay = document.getElementById('calc-total-display');
+
+    const serviceText = serviceSelect?.options[serviceSelect.selectedIndex]?.text || '';
+    const pax = paxInput?.value || '1';
+    const hasSoftlens = softlensInput?.checked ? 'Ya (+Rp 35k)' : 'Tidak';
+    const isOutside = areaSelect?.value === 'outside';
+    const locationInfo = isOutside ? `Luar Citra Raya (${kmInput?.value || '3'} km)` : 'Dalam Citra Raya (Free ongkir maks. 3 km)';
+    const total = totalDisplay?.textContent || '';
+
+    // Close calculator modal
+    closeModal('calc-modal');
+
+    // Pre-fill / sync contact reservation form
+    const waService = document.getElementById('wa-form-service') as HTMLSelectElement | null;
+    if (waService && serviceSelect) {
+        const selectedPrice = serviceSelect.value;
+        for (let i = 0; i < waService.options.length; i++) {
+            if (waService.options[i].value.includes(selectedPrice)) {
+                waService.selectedIndex = i;
+                break;
+            }
+        }
+    }
+
+    const waLocation = document.getElementById('wa-form-location') as HTMLInputElement | null;
+    if (waLocation && !waLocation.value) {
+        waLocation.value = isOutside ? 'Luar Area Citra Raya' : 'Citra Raya - Tangerang';
+    }
+
+    const waNotes = document.getElementById('wa-form-notes') as HTMLTextAreaElement | null;
+    if (waNotes) {
+        waNotes.value = `[Estimasi Kalkulator] Layanan: ${serviceText}, Jumlah: ${pax} pax, Softlens: ${hasSoftlens}, Lokasi: ${locationInfo}, Total: ${total}`;
+    }
+
+    // Smooth scroll to Konsultasi & Reservasi section
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+            (document.getElementById('wa-form-name') as HTMLInputElement)?.focus();
+        }, 400);
+    }
+
+    showToast('Silakan lengkapi formulir konsultasi & reservasi Anda ✨');
 });
 
 // ──────────────────────────────────────────

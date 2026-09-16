@@ -1,10 +1,10 @@
 ---
-// Hero.astro — Section #about: Editorial hero with image, CTAs, and stat badges
+// Hero.astro — Section #about: Editorial hero with image, CTAs, 3D Flip Card, and stat badges
 ---
 
 <section
     id="about"
-    class="pt-24 sm:pt-32 pb-16 sm:pb-24 bg-gradient-to-b from-cream via-warm-nude/30 to-cream relative"
+    class="pt-24 sm:pt-32 pb-16 sm:pb-24 bg-gradient-to-b from-cream via-warm-nude/30 to-cream relative overflow-hidden"
 >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
@@ -86,66 +86,295 @@
                             Citra Raya
                         </div>
                         <div class="text-[11px] text-muted-brown">
-                            Free Ongkir Transport
+                            Free Ongkir (Maks. 3 km)
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Visual Image Frame -->
-            <div class="lg:col-span-5 flex justify-center relative">
+            <!-- Right Visual 3D Flip Card Frame -->
+            <div class="lg:col-span-5 flex justify-center relative select-none">
+                <!-- 3D Perspective Flip Card -->
                 <div
-                    class="relative w-full max-w-md aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white"
+                    id="hero-flip-card"
+                    class="group relative w-full max-w-md aspect-[4/5] [perspective:1200px] cursor-pointer"
+                    role="region"
+                    aria-label="AULIAAS_MAKEUP Feature Card"
                 >
-                    <img
-                        src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=800&auto=format&fit=crop"
-                        alt="AULIAAS_MAKEUP Portfolio Feature"
-                        class="w-full h-full object-cover"
-                    />
+                    <!-- Card Inner Wrapper -->
                     <div
-                        class="absolute inset-0 bg-gradient-to-t from-espresso/60 via-transparent to-transparent"
+                        id="hero-flip-inner"
+                        class="relative w-full h-full duration-700 [transform-style:preserve-3d] transition-transform rounded-3xl shadow-2xl"
                     >
-                    </div>
-                    <div
-                        class="absolute bottom-6 left-6 right-6 text-white space-y-1"
-                    >
+                        <!-- FRONT FACE: Signature Look & Portfolio Visual -->
                         <div
-                            class="text-[11px] uppercase tracking-widest text-blush font-semibold"
+                            class="absolute inset-0 w-full h-full rounded-3xl overflow-hidden border-4 border-white [backface-visibility:hidden] [transform:rotateY(0deg)] bg-espresso shadow-xl"
                         >
-                            Signature Look
-                        </div>
-                        <div class="font-serif text-lg font-bold">
-                            Soft Flawless Glam
-                        </div>
-                    </div>
-                </div>
+                            <img
+                                src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=800&auto=format&fit=crop"
+                                alt="AULIAAS_MAKEUP Portfolio Feature"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-espresso/85 via-espresso/25 to-transparent"
+                            >
+                            </div>
 
-                <!-- Floating Badge -->
-                <div
-                    class="absolute top-6 left-2 sm:-left-6 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-warm-nude flex items-center gap-3"
-                >
-                    <div
-                        class="w-9 h-9 rounded-full bg-blush/30 text-espresso flex items-center justify-center font-bold text-sm"
-                    >
-                        <i class="fa-solid fa-wand-magic-sparkles text-gold"
-                        ></i>
-                    </div>
-                    <div>
-                        <div class="text-xs font-bold text-espresso">
-                            Gratis Pasang Bulu Mata
+                            <!-- Front Top Flip Action Hint -->
+                            <div class="absolute top-4 right-4 z-10">
+                                <button
+                                    type="button"
+                                    id="flip-to-back-btn"
+                                    class="bg-white/95 backdrop-blur-md hover:bg-gold hover:text-white text-espresso px-3.5 py-1.5 rounded-full text-[11px] font-semibold tracking-wide flex items-center gap-1.5 shadow-lg border border-gold/30 transition-all btn-touch"
+                                    title="Klik untuk melihat keunggulan layanan"
+                                >
+                                    <i
+                                        class="fa-solid fa-rotate text-gold text-xs transition-transform group-hover:rotate-180"
+                                    ></i>
+                                    <span>Kenapa Kami?</span>
+                                </button>
+                            </div>
+
+                            <!-- Front Bottom Label -->
+                            <div
+                                class="absolute bottom-6 left-6 right-6 text-white space-y-1 z-10"
+                            >
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="text-[11px] uppercase tracking-widest text-blush font-semibold"
+                                        >Signature Look</span
+                                    >
+                                    <span
+                                        class="px-2 py-0.5 rounded-full bg-gold/90 text-white text-[9px] font-bold"
+                                        >★ Top Rated</span
+                                    >
+                                </div>
+                                <div
+                                    class="font-serif text-xl sm:text-2xl font-bold"
+                                >
+                                    Soft Flawless Glam
+                                </div>
+                                <div
+                                    class="text-[11px] text-warm-nude/90 flex items-center gap-1.5 pt-1"
+                                >
+                                    <i
+                                        class="fa-solid fa-hand-pointer text-gold text-[10px] animate-bounce"
+                                    ></i>
+                                    <span
+                                        >Klik / Sentuh untuk melihat info
+                                        keunggulan</span
+                                    >
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-[10px] text-muted-brown">
-                            &amp; Simple Hijab Do di Semua Paket
+
+                        <!-- BACK FACE: Luxury Perks & Direct Reservation CTA -->
+                        <div
+                            class="absolute inset-0 w-full h-full rounded-3xl overflow-hidden border-4 border-gold/40 [backface-visibility:hidden] [transform:rotateY(180deg)] bg-gradient-to-br from-espresso via-[#382b26] to-espresso text-white p-6 sm:p-7 flex flex-col justify-between shadow-2xl"
+                        >
+                            <div class="space-y-3.5">
+                                <div
+                                    class="flex items-center justify-between border-b border-gold/30 pb-3"
+                                >
+                                    <div class="flex items-center gap-2.5">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold"
+                                        >
+                                            <i class="fa-solid fa-crown text-sm"
+                                            ></i>
+                                        </div>
+                                        <div>
+                                            <span
+                                                class="text-[10px] text-gold uppercase tracking-wider font-bold"
+                                                >Exclusive Perks</span
+                                            >
+                                            <h3
+                                                class="font-serif text-lg font-bold text-cream"
+                                            >
+                                                Keunggulan Layanan
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        id="flip-to-front-btn"
+                                        class="text-warm-nude/80 hover:text-gold p-1.5 text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 rounded-full px-2.5 transition-colors"
+                                    >
+                                        <i class="fa-solid fa-rotate"></i>
+                                        <span>Foto</span>
+                                    </button>
+                                </div>
+
+                                <!-- Highlights List -->
+                                <div class="space-y-2.5 text-xs">
+                                    <div
+                                        class="flex items-start gap-3 p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:border-gold/40 transition-colors"
+                                    >
+                                        <div
+                                            class="w-7 h-7 rounded-xl bg-gold/20 text-gold flex items-center justify-center shrink-0 mt-0.5"
+                                        >
+                                            <i
+                                                class="fa-solid fa-wand-magic-sparkles text-xs"
+                                            ></i>
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="font-semibold text-cream text-[13px]"
+                                            >
+                                                Flawless &amp; Long Lasting
+                                            </div>
+                                            <div
+                                                class="text-[11px] text-warm-nude/70"
+                                            >
+                                                Formula tahan lebih dari 12 jam,
+                                                anti-crack &amp; waterproof.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="flex items-start gap-3 p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:border-gold/40 transition-colors"
+                                    >
+                                        <div
+                                            class="w-7 h-7 rounded-xl bg-gold/20 text-gold flex items-center justify-center shrink-0 mt-0.5"
+                                        >
+                                            <i class="fa-solid fa-gift text-xs"
+                                            ></i>
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="font-semibold text-cream text-[13px]"
+                                            >
+                                                Free Bulu Mata &amp; Hijab Do
+                                            </div>
+                                            <div
+                                                class="text-[11px] text-warm-nude/70"
+                                            >
+                                                Gratis pasang bulu mata &amp;
+                                                hijab simpel di semua paket.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="flex items-start gap-3 p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:border-gold/40 transition-colors"
+                                    >
+                                        <div
+                                            class="w-7 h-7 rounded-xl bg-gold/20 text-gold flex items-center justify-center shrink-0 mt-0.5"
+                                        >
+                                            <i
+                                                class="fa-solid fa-truck-fast text-xs"
+                                            ></i>
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="font-semibold text-cream text-[13px]"
+                                            >
+                                                Free Transport Citra Raya
+                                            </div>
+                                            <div
+                                                class="text-[11px] text-warm-nude/70"
+                                            >
+                                                Gratis maks. 3 km. Luar area
+                                                hanya Rp 20.000 / 3 km.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="flex items-start gap-3 p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:border-gold/40 transition-colors"
+                                    >
+                                        <div
+                                            class="w-7 h-7 rounded-xl bg-gold/20 text-gold flex items-center justify-center shrink-0 mt-0.5"
+                                        >
+                                            <i
+                                                class="fa-solid fa-shield-heart text-xs"
+                                            ></i>
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="font-semibold text-cream text-[13px]"
+                                            >
+                                                Higienis &amp; Aman Kulit
+                                            </div>
+                                            <div
+                                                class="text-[11px] text-warm-nude/70"
+                                            >
+                                                Peralatan steril, brush bersih
+                                                &amp; kosmetik terpercaya.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Back Action -->
+                            <div class="pt-2 border-t border-gold/30">
+                                <a
+                                    href="#contact"
+                                    id="back-consult-btn"
+                                    class="w-full bg-gold hover:bg-gold-hover text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-center shadow-gold-glow flex items-center justify-center gap-2 btn-touch transition-all"
+                                >
+                                    <i class="fa-solid fa-calendar-check"></i>
+                                    <span>Konsultasi &amp; Reservasi</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Floating Badge -->
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+<style>
+    /* 3D Flip Card Styles */
+    #hero-flip-card.is-flipped #hero-flip-inner {
+        transform: rotateY(180deg);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        #hero-flip-card:hover #hero-flip-inner {
+            transform: rotateY(180deg);
+        }
+        #hero-flip-card.is-flipped:hover #hero-flip-inner {
+            transform: rotateY(0deg);
+        }
+    }
+</style>
+
 <script>
+    // Calculator button trigger
     document.getElementById("hero-calc-btn")?.addEventListener("click", () => {
         window.dispatchEvent(new CustomEvent("openCalcModal"));
+    });
+
+    // Flip Card Click / Tap Handlers
+    const flipCard = document.getElementById("hero-flip-card");
+    const flipToBackBtn = document.getElementById("flip-to-back-btn");
+    const flipToFrontBtn = document.getElementById("flip-to-front-btn");
+    const backConsultBtn = document.getElementById("back-consult-btn");
+
+    flipToBackBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        flipCard?.classList.add("is-flipped");
+    });
+
+    flipToFrontBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        flipCard?.classList.remove("is-flipped");
+    });
+
+    backConsultBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        // Allow link navigation to #contact
+    });
+
+    flipCard?.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest("#back-consult-btn") || target.closest("a")) return;
+        flipCard?.classList.toggle("is-flipped");
     });
 </script>
