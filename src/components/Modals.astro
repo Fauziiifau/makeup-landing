@@ -195,26 +195,26 @@
             <div class="space-y-2 pt-2 border-t border-warm-nude">
                 <label class="block font-semibold mb-1 text-espresso">Lokasi &amp; Estimasi Transportasi:</label>
                 <select id="calc-transport-area" class="w-full px-3 py-2 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none">
-                    <option value="inside">Dalam Area Citra Raya - Tangerang (Free ongkir, Maks. 3 km)</option>
-                    <option value="outside">Luar Area Citra Raya - Tangerang (Rp 20.000 / 3 km)</option>
+                    <option value="inside">Dalam Area Citra Raya - Tangerang (Free ongkir, Maks. 5 km)</option>
+                    <option value="outside">Luar Area Citra Raya - Tangerang (Rp 20.000 / 5 km)</option>
                 </select>
 
                 <div id="calc-km-container" class="hidden space-y-2 pt-1 bg-warm-nude/30 p-3 rounded-xl border border-warm-nude">
                     <div class="flex items-center justify-between text-[11px] text-muted-brown">
                         <span>Jarak dari Citra Raya (KM):</span>
-                        <span id="calc-transport-rate" class="font-semibold text-gold">Rp 20.000 / 3 km</span>
+                        <span id="calc-transport-rate" class="font-semibold text-gold">Rp 20.000 / 5 km</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <input type="number" id="calc-km-input" value="3" min="1" max="100"
+                        <input type="number" id="calc-km-input" value="5" min="1" max="100"
                             class="w-full px-3 py-2 rounded-xl border border-warm-nude text-xs focus:ring-1 focus:ring-gold focus:outline-none bg-white">
                         <span class="text-xs font-semibold text-muted-brown">KM</span>
                     </div>
                     <div class="flex flex-wrap gap-1.5 pt-0.5">
-                        <button type="button" class="calc-km-btn px-2.5 py-1 bg-white hover:bg-gold hover:text-white rounded-lg text-[10px] font-semibold text-espresso transition-colors border border-warm-nude" data-km="3">3 KM</button>
-                        <button type="button" class="calc-km-btn px-2.5 py-1 bg-white hover:bg-gold hover:text-white rounded-lg text-[10px] font-semibold text-espresso transition-colors border border-warm-nude" data-km="6">6 KM</button>
-                        <button type="button" class="calc-km-btn px-2.5 py-1 bg-white hover:bg-gold hover:text-white rounded-lg text-[10px] font-semibold text-espresso transition-colors border border-warm-nude" data-km="9">9 KM</button>
-                        <button type="button" class="calc-km-btn px-2.5 py-1 bg-white hover:bg-gold hover:text-white rounded-lg text-[10px] font-semibold text-espresso transition-colors border border-warm-nude" data-km="12">12 KM</button>
+                        <button type="button" class="calc-km-btn px-2.5 py-1 bg-white hover:bg-gold hover:text-white rounded-lg text-[10px] font-semibold text-espresso transition-colors border border-warm-nude" data-km="5">5 KM</button>
+                        <button type="button" class="calc-km-btn px-2.5 py-1 bg-white hover:bg-gold hover:text-white rounded-lg text-[10px] font-semibold text-espresso transition-colors border border-warm-nude" data-km="10">10 KM</button>
                         <button type="button" class="calc-km-btn px-2.5 py-1 bg-white hover:bg-gold hover:text-white rounded-lg text-[10px] font-semibold text-espresso transition-colors border border-warm-nude" data-km="15">15 KM</button>
+                        <button type="button" class="calc-km-btn px-2.5 py-1 bg-white hover:bg-gold hover:text-white rounded-lg text-[10px] font-semibold text-espresso transition-colors border border-warm-nude" data-km="20">20 KM</button>
+                        <button type="button" class="calc-km-btn px-2.5 py-1 bg-white hover:bg-gold hover:text-white rounded-lg text-[10px] font-semibold text-espresso transition-colors border border-warm-nude" data-km="25">25 KM</button>
                     </div>
                 </div>
             </div>
@@ -232,7 +232,7 @@
                     <span class="text-xs font-bold text-espresso">Total Estimasi:</span>
                     <span class="font-serif text-2xl font-bold text-espresso" id="calc-total-display">Rp 150.000</span>
                 </div>
-                <div class="text-[10px] text-muted-brown text-center" id="calc-note-display">*Gratis ongkir untuk Citra Raya &amp; sekitarnya maks. 3 km</div>
+                <div class="text-[10px] text-muted-brown text-center" id="calc-note-display">*Gratis ongkir untuk Citra Raya &amp; sekitarnya maks. 5 km</div>
             </div>
 
             <button id="calc-continue-btn"

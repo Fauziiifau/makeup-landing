@@ -473,19 +473,19 @@ function runCalculator() {
     const isOutside = areaSelect?.value === 'outside';
 
     let transportFee = 0;
-    let km = 3;
+    let km = 5;
 
     if (isOutside) {
         kmContainer?.classList.remove('hidden');
-        km = Math.max(1, parseFloat(kmInput?.value || '3') || 3);
-        const multiplier = Math.ceil(km / 3);
+        km = Math.max(1, parseFloat(kmInput?.value || '5') || 5);
+        const multiplier = Math.ceil(km / 5);
         transportFee = multiplier * 20000;
         if (transportDisplay) {
             transportDisplay.className = 'font-semibold text-espresso';
             transportDisplay.textContent = `Rp ${transportFee.toLocaleString('id-ID')} (${km} KM)`;
         }
         if (noteDisplay) {
-            noteDisplay.textContent = `*Luar Citra Raya: ${km} KM (${multiplier}x kelipatan 3 KM @ Rp 20.000)`;
+            noteDisplay.textContent = `*Luar Citra Raya: ${km} KM (${multiplier}x kelipatan 5 KM @ Rp 20.000)`;
         }
     } else {
         kmContainer?.classList.add('hidden');
@@ -495,7 +495,7 @@ function runCalculator() {
             transportDisplay.textContent = 'Rp 0 (FREE Ongkir)';
         }
         if (noteDisplay) {
-            noteDisplay.textContent = '*Gratis ongkir untuk Citra Raya & sekitarnya maks. 3 km';
+            noteDisplay.textContent = '*Gratis ongkir untuk Citra Raya & sekitarnya maks. 5 km';
         }
     }
 
@@ -556,7 +556,7 @@ document.getElementById('calc-continue-btn')?.addEventListener('click', () => {
     const pax = paxInput?.value || '1';
     const hasSoftlens = softlensInput?.checked ? 'Ya (+Rp 35k)' : 'Tidak';
     const isOutside = areaSelect?.value === 'outside';
-    const locationInfo = isOutside ? `Luar Citra Raya (${kmInput?.value || '3'} km)` : 'Dalam Citra Raya (Free ongkir maks. 3 km)';
+    const locationInfo = isOutside ? `Luar Citra Raya (${kmInput?.value || '5'} km)` : 'Dalam Citra Raya (Free ongkir maks. 5 km)';
     const total = totalDisplay?.textContent || '';
 
     // Close calculator modal
