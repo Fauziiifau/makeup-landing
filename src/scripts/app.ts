@@ -21,8 +21,15 @@ declare const __firebase_config: string | undefined;
 declare const __initial_auth_token: string | undefined;
 
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'auliaas-makeup-app';
-const firebaseConfig =
-    typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+const firebaseConfig = {
+                        apiKey: "AIzaSyCyrxqGKQpxKDOe2IUVof1YqjVJA_klH9g",
+                        authDomain: "auliaas-makeup.firebaseapp.com",
+                        projectId: "auliaas-makeup",
+                        storageBucket: "auliaas-makeup.firebasestorage.app",
+                        messagingSenderId: "590533396659",
+                        appId: "1:590533396659:web:c34c0ba51ae302050a88c6",
+                        measurementId: "G-2YZG8H764C"
+                        };
 const initialAuthToken =
     typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
