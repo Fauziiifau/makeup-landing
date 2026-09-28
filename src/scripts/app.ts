@@ -2,7 +2,12 @@
 // Handles: Firebase init, testimonials CRUD, modals, calculator, admin dashboard
 
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
+import { 
+    getAuth, 
+    signInAnonymously, 
+    signInWithEmailAndPassword, 
+    signOut,
+    } from 'firebase/auth';
 import {
     getFirestore,
     collection,
@@ -11,27 +16,21 @@ import {
     deleteDoc,
     doc,
     onSnapshot,
-} from 'firebase/firestore';
+    } from 'firebase/firestore';
 
 // ──────────────────────────────────────────
-// Firebase Init (optional — falls back to local state)
+// Firebase Init
 // ──────────────────────────────────────────
-declare const __app_id: string | undefined;
-declare const __firebase_config: string | undefined;
-declare const __initial_auth_token: string | undefined;
-
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'auliaas-makeup-app';
+const appId = 'auliaas-makeup-app';
 const firebaseConfig = {
-                        apiKey: "AIzaSyCyrxqGKQpxKDOe2IUVof1YqjVJA_klH9g",
-                        authDomain: "auliaas-makeup.firebaseapp.com",
-                        projectId: "auliaas-makeup",
-                        storageBucket: "auliaas-makeup.firebasestorage.app",
-                        messagingSenderId: "590533396659",
-                        appId: "1:590533396659:web:c34c0ba51ae302050a88c6",
-                        measurementId: "G-2YZG8H764C"
-                        };
-const initialAuthToken =
-    typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
+    measurementId: import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID,
+};
 
 let db: ReturnType<typeof getFirestore> | null = null;
 let auth: ReturnType<typeof getAuth> | null = null;
@@ -97,7 +96,9 @@ function showToast(message: string, type: 'success' | 'error' = 'success') {
             ? 'bg-rose-600 text-white'
             : 'bg-espresso text-cream border border-gold/40'
     }`;
-    toast.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-triangle-exclamation text-rose-200' : 'fa-circle-check text-gold'}"></i> <span>${message}</span>`;
+    toast.innerHTML = `<i class="fa-solid ${
+        type === 'error' ? 'fa-triangle-exclamation text-rose-200' : 'fa-circle-check text-gold'
+    }"></i> <span>${message}</span>`;
     container.appendChild(toast);
     requestAnimationFrame(() => {
         toast.classList.remove('translate-x-10', 'opacity-0');
@@ -126,9 +127,6 @@ window.addEventListener('openLightbox', ((e: CustomEvent) => {
     openModal('lightbox-modal');
 }) as EventListener);
 document.getElementById('close-lightbox-btn')?.addEventListener('click', () => closeModal('lightbox-modal'));
-document.getElementById('lightbox-modal')?.addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) closeModal('lightbox-modal');
-});
 
 // Review Modal
 window.addEventListener('openReviewModal', () => openModal('review-modal'));
@@ -162,7 +160,7 @@ document.getElementById('close-calc-btn')?.addEventListener('click', () => close
 document.getElementById('close-edit-btn')?.addEventListener('click', () => closeModal('edit-modal'));
 
 // Close modals on backdrop click
-['review-modal', 'admin-login-modal', 'admin-dashboard-modal', 'calc-modal', 'edit-modal'].forEach(id => {
+['lightbox-modal', 'review-modal', 'admin-login-modal', 'admin-dashboard-modal', 'calc-modal', 'edit-modal'].forEach(id => {
     document.getElementById(id)?.addEventListener('click', (e) => {
         if (e.target === e.currentTarget) closeModal(id);
     });
@@ -189,16 +187,27 @@ document.querySelectorAll<HTMLElement>('#star-selector .star-btn').forEach(star 
 // ──────────────────────────────────────────
 // Admin Auth
 // ──────────────────────────────────────────
-document.getElementById('admin-login-form')?.addEventListener('submit', (e) => {
+document.getElementById('admin-login-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const pass = (document.getElementById('admin-pass-input') as HTMLInputElement).value;
-    if (pass === 'admin123' || pass === 'admin') {
+    if (!auth) {
+        showToast('Firebase Auth belum siap.', 'error');
+        return;
+    }
+
+    const passInput = (document.getElementById('admin-pass-input') as HTMLInputElement).value;
+    // Email admin otomatis menggunakan email yang Anda daftarkan di Firebase Console
+    const adminEmail = 'auliandaris@gmail.com'; 
+
+    try {
+        // Melakukan login aman langsung melalui sistem Firebase Authentication
+        await signInWithEmailAndPassword(auth, adminEmail, passInput);
         isAdminLoggedIn = true;
         closeModal('admin-login-modal');
         openAdminDashboard();
         showToast('Login Admin Berhasil!');
-    } else {
-        showToast('Password Admin Salah!', 'error');
+    } catch (error) {
+        console.error('Login admin gagal:', error);
+        showToast('Password Admin Salah atau Akun tidak ditemukan!', 'error');
     }
 });
 
@@ -230,94 +239,102 @@ function switchAdminTab(tab: 'pending' | 'approved') {
 // ──────────────────────────────────────────
 document.getElementById('review-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = (document.getElementById('rev-name') as HTMLInputElement).value;
+
+    if (!db || !auth?.currentUser) {
+        showToast('Database belum terhubung. Silakan coba kembali.', 'error');
+        return;
+    }
+
+    const name = (document.getElementById('rev-name') as HTMLInputElement).value.trim();
     const service = (document.getElementById('rev-service') as HTMLSelectElement).value;
     const rating = parseInt((document.getElementById('rev-rating') as HTMLInputElement).value) || 5;
-    const content = (document.getElementById('rev-content') as HTMLTextAreaElement).value;
+    const content = (document.getElementById('rev-content') as HTMLTextAreaElement).value.trim();
 
-    const newReview: Testimonial = {
-        id: '',
-        name, service, rating, content,
+    // Use Omit to prevent saving an empty 'id' to Firestore
+    const newReview: Omit<Testimonial, 'id'> = {
+        name,
+        service,
+        rating,
+        content,
         is_approved: false,
         createdAt: new Date().toISOString(),
     };
 
-    if (db && auth?.currentUser) {
-        try {
-            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'testimonials');
-            await addDoc(colRef, newReview);
-        } catch {
-            newReview.id = 'temp-' + Date.now();
-            testimonials.push(newReview);
-            renderAll();
-        }
-    } else {
-        newReview.id = 'temp-' + Date.now();
-        testimonials.push(newReview);
-        renderAll();
-    }
+    try {
+        const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'testimonials');
+        await addDoc(colRef, newReview);
 
-    (document.getElementById('review-form') as HTMLFormElement).reset();
-    setRating(5);
-    closeModal('review-modal');
-    showToast('Ulasan dikirim! Menunggu persetujuan admin.');
+        (document.getElementById('review-form') as HTMLFormElement).reset();
+        setRating(5);
+        closeModal('review-modal');
+        showToast('Ulasan berhasil dikirim dan menunggu persetujuan admin.');
+    } catch (error) {
+        console.error('Gagal menyimpan testimoni:', error);
+        showToast('Ulasan gagal disimpan. Silakan coba lagi.', 'error');
+    }
 });
 
 // ──────────────────────────────────────────
 // Admin CRUD Operations
 // ──────────────────────────────────────────
 async function approveTestimonial(id: string) {
-    const item = testimonials.find(t => t.id === id);
-    if (!item) return;
-    if (db && auth?.currentUser && !id.startsWith('seed-') && !id.startsWith('temp-')) {
-        try {
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'testimonials', id), { is_approved: true });
-        } catch {
-            item.is_approved = true;
-            renderAll();
-        }
-    } else {
-        item.is_approved = true;
-        renderAll();
+    if (!db || !auth?.currentUser) return;
+    if (id.startsWith('seed-')) {
+        showToast('Testimoni bawaan tidak dapat diedit/dihapus secara live.', 'error');
+        return;
     }
-    showToast('Testimoni disetujui & tayang!');
+    
+    try {
+        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'testimonials', id), { is_approved: true });
+        showToast('Testimoni disetujui & tayang!');
+    } catch (error) {
+        console.error('Gagal menyetujui ulasan:', error);
+        showToast('Gagal menyetujui ulasan.', 'error');
+    }
 }
 
 async function unapproveTestimonial(id: string) {
-    const item = testimonials.find(t => t.id === id);
-    if (!item) return;
-    if (db && auth?.currentUser && !id.startsWith('seed-') && !id.startsWith('temp-')) {
-        try {
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'testimonials', id), { is_approved: false });
-        } catch {
-            item.is_approved = false;
-            renderAll();
-        }
-    } else {
-        item.is_approved = false;
-        renderAll();
+    if (!db || !auth?.currentUser) return;
+    if (id.startsWith('seed-')) {
+         showToast('Testimoni bawaan tidak dapat diedit/dihapus secara live.', 'error');
+         return;
     }
-    showToast('Status testimoni diubah ke pending.');
+
+    try {
+        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'testimonials', id), { is_approved: false });
+        showToast('Status testimoni diubah ke pending.');
+    } catch (error) {
+         console.error('Gagal unapprove ulasan:', error);
+         showToast('Gagal merubah status ulasan.', 'error');
+    }
 }
 
 async function deleteTestimonial(id: string) {
-    if (db && auth?.currentUser && !id.startsWith('seed-') && !id.startsWith('temp-')) {
+    if (!db || !auth?.currentUser) return;
+    if (id.startsWith('seed-')) {
+         showToast('Testimoni bawaan tidak dapat diedit/dihapus secara live.', 'error');
+         return;
+    }
+
+    if(confirm('Apakah Anda yakin ingin menghapus testimoni ini secara permanen?')) {
         try {
             await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'testimonials', id));
-        } catch {
-            testimonials = testimonials.filter(t => t.id !== id);
-            renderAll();
+            showToast('Testimoni berhasil dihapus.');
+        } catch (error) {
+             console.error('Gagal menghapus ulasan:', error);
+             showToast('Gagal menghapus ulasan.', 'error');
         }
-    } else {
-        testimonials = testimonials.filter(t => t.id !== id);
-        renderAll();
     }
-    showToast('Testimoni berhasil dihapus.');
 }
 
 function openEditModal(id: string) {
     const item = testimonials.find(t => t.id === id);
     if (!item) return;
+    if (id.startsWith('seed-')) {
+         showToast('Testimoni bawaan tidak dapat diedit/dihapus secara live.', 'error');
+         return;
+    }
+
     (document.getElementById('edit-id') as HTMLInputElement).value = item.id;
     (document.getElementById('edit-name') as HTMLInputElement).value = item.name;
     (document.getElementById('edit-service') as HTMLInputElement).value = item.service;
@@ -328,28 +345,22 @@ function openEditModal(id: string) {
 
 document.getElementById('edit-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!db || !auth?.currentUser) return;
+
     const id = (document.getElementById('edit-id') as HTMLInputElement).value;
     const name = (document.getElementById('edit-name') as HTMLInputElement).value;
     const service = (document.getElementById('edit-service') as HTMLInputElement).value;
     const rating = parseInt((document.getElementById('edit-rating') as HTMLInputElement).value);
     const content = (document.getElementById('edit-content') as HTMLTextAreaElement).value;
 
-    const item = testimonials.find(t => t.id === id);
-    if (!item) return;
-
-    if (db && auth?.currentUser && !id.startsWith('seed-') && !id.startsWith('temp-')) {
-        try {
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'testimonials', id), { name, service, rating, content });
-        } catch {
-            Object.assign(item, { name, service, rating, content });
-            renderAll();
-        }
-    } else {
-        Object.assign(item, { name, service, rating, content });
-        renderAll();
+    try {
+        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'testimonials', id), { name, service, rating, content });
+        closeModal('edit-modal');
+        showToast('Testimoni berhasil diperbarui.');
+    } catch (error) {
+        console.error('Gagal edit ulasan:', error);
+        showToast('Gagal menyimpan perubahan ulasan.', 'error');
     }
-    closeModal('edit-modal');
-    showToast('Testimoni berhasil diperbarui.');
 });
 
 // ──────────────────────────────────────────
@@ -392,7 +403,7 @@ function renderAdminLists() {
     if (!pendingList || !approvedList) return;
 
     const pending = testimonials.filter(t => !t.is_approved);
-    const approved = testimonials.filter(t => t.is_approved);
+    const approved = testimonials.filter(t => t.is_approved && !t.id.startsWith('seed-'));
 
     document.getElementById('count-pending')!.textContent = String(pending.length);
     document.getElementById('count-approved')!.textContent = String(approved.length);
@@ -416,15 +427,15 @@ function renderAdminLists() {
                     <p class="text-xs text-espresso italic font-medium">"${item.content}"</p>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
-                    <button onclick="window.__app.approve('${item.id}')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold"><i class="fa-solid fa-check"></i> Setujui</button>
-                    <button onclick="window.__app.openEdit('${item.id}')" class="bg-espresso text-cream px-3 py-1.5 rounded-xl text-xs font-semibold">Edit</button>
-                    <button onclick="window.__app.delete('${item.id}')" class="bg-rose-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Hapus</button>
+                    <button onclick="window.__app.approve('${item.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors"><i class="fa-solid fa-check"></i> Setujui</button>
+                    <button onclick="window.__app.openEdit('${item.id}')" class="bg-espresso hover:bg-black text-cream px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors">Edit</button>
+                    <button onclick="window.__app.delete('${item.id}')" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors">Hapus</button>
                 </div>
             </div>
         `).join('');
 
     approvedList.innerHTML = approved.length === 0
-        ? `<div class="p-6 text-center text-xs text-muted-brown bg-cream rounded-2xl">Belum ada ulasan yang disetujui.</div>`
+        ? `<div class="p-6 text-center text-xs text-muted-brown bg-cream rounded-2xl">Belum ada ulasan klien yang disetujui.</div>`
         : approved.map(item => `
             <div class="p-4 bg-cream border border-warm-nude rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="space-y-1">
@@ -436,9 +447,9 @@ function renderAdminLists() {
                     <p class="text-xs text-espresso italic">"${item.content}"</p>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
-                    <button onclick="window.__app.unapprove('${item.id}')" class="bg-amber-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Unapprove</button>
-                    <button onclick="window.__app.openEdit('${item.id}')" class="bg-espresso text-cream px-3 py-1.5 rounded-xl text-xs font-semibold">Edit</button>
-                    <button onclick="window.__app.delete('${item.id}')" class="bg-rose-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Hapus</button>
+                    <button onclick="window.__app.unapprove('${item.id}')" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors">Sembunyikan</button>
+                    <button onclick="window.__app.openEdit('${item.id}')" class="bg-espresso hover:bg-black text-cream px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors">Edit</button>
+                    <button onclick="window.__app.delete('${item.id}')" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors">Hapus</button>
                 </div>
             </div>
         `).join('');
@@ -607,39 +618,55 @@ document.getElementById('calc-continue-btn')?.addEventListener('click', () => {
 // Firebase Init & Snapshot
 // ──────────────────────────────────────────
 async function initFirebase() {
-    if (!firebaseConfig) {
-        renderAll();
-        return;
-    }
     try {
         const app = initializeApp(firebaseConfig);
+
         db = getFirestore(app);
         auth = getAuth(app);
 
-        if (initialAuthToken) {
-            await signInWithCustomToken(auth, initialAuthToken);
-        } else {
-            await signInAnonymously(auth);
+        await signInAnonymously(auth);
+
+        if (!auth.currentUser) {
+            throw new Error('Firebase authentication gagal.');
         }
 
-        if (auth.currentUser) {
-            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'testimonials');
-            onSnapshot(colRef, (snapshot) => {
+        const colRef = collection(
+            db,
+            'artifacts',
+            appId,
+            'public',
+            'data',
+            'testimonials'
+        );
+
+        onSnapshot(
+            colRef,
+            (snapshot) => {
                 const fetched: Testimonial[] = [];
-                snapshot.forEach(docSnap => {
-                    fetched.push({ id: docSnap.id, ...(docSnap.data() as Omit<Testimonial, 'id'>) });
+
+                snapshot.forEach((docSnap) => {
+                    // Mencegah id kosong menimpa docSnap.id
+                    fetched.push({
+                        ...(docSnap.data() as Omit<Testimonial, 'id'>),
+                        id: docSnap.id,
+                    });
                 });
-                if (fetched.length > 0) {
-                    testimonials = [...defaultTestimonials, ...fetched];
-                }
+
+                testimonials = [
+                    ...defaultTestimonials,
+                    ...fetched,
+                ];
+
                 renderAll();
-            }, () => {
-                renderAll();
-            });
-        } else {
-            renderAll();
-        }
-    } catch {
+            },
+            (error) => {
+                console.error('Firestore snapshot error:', error);
+                showToast('Gagal mengambil database testimoni.', 'error');
+            }
+        );
+    } catch (error) {
+        console.error('Firebase initialization error:', error);
+        showToast('Database Firebase tidak dapat terhubung.', 'error');
         renderAll();
     }
 }
