@@ -1,19 +1,22 @@
 ---
-// Contact.astro — Section #contact: WhatsApp direct booking form + social links
+// Contact.astro — Section #contact: WhatsApp direct booking form + map + social links
 ---
 
 <section id="contact"
     class="pt-8 sm:pt-12 pb-16 sm:pb-24 bg-gradient-to-t from-warm-nude/40 to-cream border-t border-warm-nude">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-gold/30 space-y-8">
+            <!-- Header Section -->
             <div class="text-center space-y-2">
                 <span class="text-xs font-bold text-gold uppercase tracking-widest">Konsultasi &amp; Reservasi</span>
                 <h2 class="font-serif text-2xl sm:text-4xl font-bold text-espresso">Formulir Pemesanan Jadwal</h2>
                 <p class="text-xs sm:text-sm text-muted-brown">Isi data di bawah ini untuk mengirimkan format pemesanan otomatis langsung ke WhatsApp kami.</p>
             </div>
 
+            <!-- Booking Form -->
             <form id="wa-booking-form" class="space-y-4">
                 <p class="mt-1 text-xs text-muted-brown">*Pilih lokasi acara saat menggunakan <a href="#hero-calc-btn" class="font-semibold text-gold underline decoration-gold/40 underline-offset-2 hover:text-gold-hover transition-colors">Kalkulator &amp; Booking</a> untuk mendapatkan estimasi biaya yang lebih akurat.</p>
+                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-espresso mb-1">Nama Lengkap *</label>
@@ -65,15 +68,44 @@
                 </button>
             </form>
 
+            <!-- Find Us / Maps Section -->
+            <div class="pt-8 border-t border-warm-nude space-y-4">
+                <div class="text-center space-y-1">
+                    <h3 class="font-serif text-xl sm:text-2xl font-bold text-espresso">Lokasi Kami</h3>
+                    <p class="text-xs sm:text-sm text-muted-brown">Kunjungi studio kami atau jadikan titik referensi untuk perhitungan biaya transport.</p>
+                </div>
+                
+                <!-- Map Iframe -->
+                <div class="w-full rounded-2xl overflow-hidden border border-warm-nude shadow-sm">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!3m2!1sid!2sid!4v1790700959510!5m2!1sid!2sid!6m8!1m7!1sySaeuhLqHEPfB5_zPrwzkw!2m2!1d-6.279862392968189!2d106.5284530693588!3f191.71491376068383!4f1.8593244999795786!5f0.7820865974627469" 
+                        class="w-full h-64 sm:h-80" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="strict-origin-when-cross-origin">
+                    </iframe>
+                </div>
+
+                <!-- Location Note / Detail -->
+                <div class="flex items-start gap-3 p-4 bg-warm-nude/20 rounded-xl border border-warm-nude/60">
+                    <div class="flex-shrink-0 mt-0.5 text-gold">
+                        <i class="fa-solid fa-location-dot text-base"></i>
+                    </div>
+                    <div>
+                        <span class="block text-xs font-bold text-espresso mb-1">Detail Patokan Lokasi:</span>
+                        <p class="text-xs sm:text-sm text-muted-brown leading-relaxed">
+                            Samping counter <strong>One Celluler</strong>, Kontrakan Nomor 5 (Paling ujung).
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Social Links -->
             <div class="pt-6 border-t border-warm-nude flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div class="text-xs text-muted-brown">Ikuti kami di sosial media untuk update look terbaru:</div>
                 <div class="flex items-center gap-4">
-                    <a href="https://instagram.com" target="_blank" rel="noopener"
-                        class="w-9 h-9 rounded-full bg-warm-nude text-espresso flex items-center justify-center hover:bg-gold hover:text-white transition-colors">
-                        <i class="fa-brands fa-instagram text-base"></i>
-                    </a>
-                    <a href="https://tiktok.com" target="_blank" rel="noopener"
+                    <a href="https://www.tiktok.com/@auliaas_makeup?_r=1&_t=ZS-9A8r0ew7hdF" target="_blank" rel="noopener"
                         class="w-9 h-9 rounded-full bg-warm-nude text-espresso flex items-center justify-center hover:bg-gold hover:text-white transition-colors">
                         <i class="fa-brands fa-tiktok text-base"></i>
                     </a>
