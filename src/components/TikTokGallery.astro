@@ -1,0 +1,116 @@
+---
+import { featuredVideos, tiktokProfile } from '../data/tiktok';
+const featured = featuredVideos.filter(v => /^\d{15,25}$/.test(v.id));
+---
+<section id="tiktok" class="bg-gradient-to-b from-cream via-warm-nude/30 to-cream py-16 sm:py-24 border-t border-warm-nude/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-9">
+      <span class="text-xs font-bold text-gold uppercase tracking-widest">AULIAAS_MAKEUP di TikTok</span>
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso mt-3">Beauty in Motion</h2>
+      <p class="text-sm text-muted-brown mt-3">Lihat detail makeup kami lewat video, dari look favorit hingga hasil terbaru.</p>
+    </div>
+
+    {featured.length > 0 && <div class="mb-12">
+      <h3 class="font-serif text-xl sm:text-2xl font-semibold text-espresso mb-5">Video Pilihan Kami</h3>
+      <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4" aria-label="Video TikTok unggulan">
+        {featured.map(video => <article class="w-[245px] sm:w-[275px] flex-none snap-start bg-white rounded-3xl border border-warm-nude overflow-hidden shadow-sm">
+          <div class="aspect-[9/16] bg-espresso relative" data-video-id={video.id}>
+            <button type="button" class="tiktok-play absolute inset-0 w-full h-full text-white flex flex-col items-center justify-center gap-3 bg-gradient-to-t from-espresso to-espresso/70 hover:from-espresso/90" aria-label={`Putar ${video.title}`}>
+              <i class="fa-solid fa-circle-play text-5xl text-gold"></i><span class="font-semibold text-sm px-4 text-center">Putar video</span>
+            </button>
+          </div>
+          <div class="p-4"><p class="text-sm font-semibold text-espresso line-clamp-2">{video.title}</p><a href={`${tiktokProfile}/video/${video.id}`} target="_blank" rel="noopener noreferrer" class="inline-block text-xs text-gold hover:underline mt-2">Buka di TikTok</a></div>
+        </article>)}
+      </div>
+    </div>}
+
+    <div>
+      <div class="flex flex-wrap gap-3 justify-between items-center mb-5">
+        <h3 class="font-serif text-xl sm:text-2xl font-semibold text-espresso">Postingan Terbaru</h3>
+        <span id="tiktok-updated" class="text-xs text-muted-brown" aria-live="polite"></span>
+      </div>
+      <div id="tiktok-recent" class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4" aria-live="polite">
+        <p class="text-sm text-muted-brown">Sedang memeriksa video terbaru...</p>
+      </div>
+    </div>
+    <div class="text-center mt-8">
+      <a href={tiktokProfile} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-espresso text-cream hover:bg-espresso/90 px-7 py-3.5 rounded-full text-xs font-bold tracking-wide transition-colors">
+        <i class="fa-brands fa-tiktok"></i> Lihat Semua Video di TikTok
+      </a>
+    </div>
+  </div>
+</section>
+<script>
+  const profile = 'https://www.tiktok.com/@auliaas_makeup';
+  const featuredIds = new Set(Array.from(document.querySelectorAll<HTMLElement>('[data-video-id]')).map(x => x.dataset.videoId));
+  function card(video: { id: string; title: string }) {
+    const article = document.createElement('article');
+    article.className = 'w-[245px] sm:w-[275px] flex-none snap-start bg-white rounded-3xl border border-warm-nude overflow-hidden shadow-sm';
+    const frame = document.createElement('div');
+    frame.className = 'aspect-[9/16] bg-espresso relative';
+    frame.dataset.videoId = video.id;
+    const play = document.createElement('button');
+    play.type = 'button';
+    play.className = 'tiktok-play absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-3 text-white bg-gradient-to-t from-espresso to-espresso/70';
+    play.setAttribute('aria-label', `Putar ${video.title}`);
+    play.innerHTML = '<i class="fa-solid fa-circle-play text-5xl text-gold"></i><span class="font-semibold text-sm">Putar video</span>';
+    frame.append(play);
+    const details = document.createElement('div');
+    details.className = 'p-4';
+    const title = document.createElement('p');
+    title.className = 'text-sm font-semibold text-espresso line-clamp-2';
+    title.textContent = video.title || 'Video TikTok';
+    const link = document.createElement('a');
+    link.href = `${profile}/video/${video.id}`;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.className = 'inline-block text-xs text-gold hover:underline mt-2';
+    link.textContent = 'Buka di TikTok';
+    details.append(title, link);
+    article.append(frame, details);
+    return article;
+  }
+  document.addEventListener('click', (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.tiktok-play');
+    if (!button) return;
+    const container = button.closest<HTMLElement>('[data-video-id]');
+    const id = container?.dataset.videoId;
+    if (!container || !id || !/^\d{15,25}$/.test(id)) return;
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.tiktok.com/player/v1/${id}`;
+    iframe.title = 'Postingan TikTok AULIAAS_MAKEUP';
+    iframe.className = 'w-full aspect-[9/16] rounded-xl';
+    iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    container.replaceChildren(iframe);
+  });
+  const recent = document.getElementById('tiktok-recent');
+  const updated = document.getElementById('tiktok-updated');
+  async function loadRecent() {
+    if (!recent) return;
+    try {
+      const response = await fetch('/tiktok-latest.json', { cache: 'no-cache' });
+      if (!response.ok) throw new Error('Feed tidak tersedia');
+      const data: unknown = await response.json();
+      if (typeof data !== 'object' || data === null || !('videos' in data) || !Array.isArray(data.videos)) throw new Error('Format feed salah');
+      const items = data.videos.filter((v: any) => v && typeof v.id === 'string' && /^\d{15,25}$/.test(v.id) && !featuredIds.has(v.id)).slice(0, 6);
+      recent.replaceChildren();
+      if (!items.length) {
+        const p = document.createElement('p');
+        p.className = 'text-sm text-muted-brown';
+        p.textContent = 'Video terbaru belum tersinkronisasi. Anda tetap bisa melihat semua video melalui profil TikTok kami.';
+        recent.append(p);
+        return;
+      }
+      items.forEach((v: any) => recent.append(card({ id: v.id, title: String(v.title || 'Video TikTok') })));
+      if ('updatedAt' in data && typeof data.updatedAt === 'string' && updated) {
+        const dt = new Date(data.updatedAt);
+        if (!Number.isNaN(dt.getTime())) updated.textContent = `Diperbarui ${dt.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+      }
+    } catch {
+      recent.textContent = 'Video terbaru belum dapat dimuat. Silakan kunjungi akun TikTok kami.';
+    }
+  }
+  loadRecent();
+</script>
