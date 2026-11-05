@@ -5,22 +5,18 @@ import hijabIcon from "../assets/icons/hijab.png";
 
 const advantages = [
     {
-        icon: "fa-eye",
         title: "Free Bulu Mata",
         desc: "Setiap pengerjaan makeup sudah termasuk pemasangan bulu mata gratis tanpa biaya tambahan.",
     },
     {
-        image: hijabIcon,
         title: "Free Simple Hijab Do",
         desc: "Penataan hijab simpel yang rapi & elegan sudah termasuk dalam paket riasan Anda.",
     },
     {
-        icon: "fa-truck-fast",
         title: "Free Transport Citra Raya",
         desc: "Bebas biaya ongkir transportasi untuk pengerjaan lokasi di dalam kawasan Citra Raya, Tangerang.",
     },
     {
-        icon: "fa-gem",
         title: "Produk Original & Higienis",
         desc: "Menggunakan kosmetik bermerek original dan kuas/spons tersterilisasi aman untuk kulit.",
     },
@@ -38,17 +34,6 @@ const advantages = [
             {
                 advantages.map((adv) => (
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gold/20 flex flex-col items-center sm:items-start space-y-3">
-                        <div class="w-12 h-12 rounded-2xl bg-warm-nude text-gold flex items-center justify-center text-xl overflow-hidden p-2">
-                            {adv.image ? (
-                                <Image
-                                    src={adv.image}
-                                    alt={adv.title}
-                                    class="w-full h-full object-contain mix-blend-multiply"
-                                />
-                            ) : (
-                                <i class={`fa-solid ${adv.icon}`} />
-                            )}
-                        </div>
                         <h4 class="font-serif font-bold text-espresso text-base">
                             {adv.title}
                         </h4>

@@ -9,7 +9,9 @@ import makeupEdit7 from "../assets/makeup/makeup_edit7.png";
 import makeupEdit8 from "../assets/makeup/makeup_edit8.png";
 import makeupEdit9 from "../assets/makeup/makeup_edit9.png";
 
-// Portfolio.astro — Section #portfolio: Filtered gallery grid with lightbox
+import { featuredVideos, tiktokProfile } from '../data/tiktok';
+
+const featured = featuredVideos.filter(video => /^\d{15,25}$/.test(video.id));
 const portfolioItems = [
     {
         id: 1,
@@ -94,24 +96,24 @@ const portfolioItems = [
     },
 ];
 ---
-
 <section id="portfolio" class="pt-8 sm:pt-12 pb-16 sm:pb-24 bg-cream">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
             <span class="text-xs font-bold text-gold uppercase tracking-widest">Galeri Karya &amp; Hasil Makeup</span>
             <h2 class="font-serif text-3xl sm:text-4xl font-bold text-espresso">Portofolio Kategori</h2>
-            <p class="text-muted-brown text-sm sm:text-base">Klik pada foto untuk memperbesar karya riasan kami.</p>
+            <p class="text-muted-brown text-sm sm:text-base">Jelajahi foto dan video hasil makeup kami.</p>
         </div>
 
-        <!-- Category Filter Tabs -->
-        <div class="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-4 mb-8">
-            <button class="port-tab active-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-espresso text-cream" data-cat="all">Semua Look</button>
-            <button class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="bridal">Bridal &amp; Tunangan</button>
-            <button class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="graduation">Wisuda &amp; Sekolah</button>
-            <button class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="party">Party &amp; Event</button>
+        <!-- Filter gabungan: foto dan video -->
+        <div class="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-4 mb-8" aria-label="Filter portofolio">
+            <button type="button" class="port-tab active-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-espresso text-cream" data-cat="all" aria-pressed="true">Semua Look</button>
+            <button type="button" class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="bridal" aria-pressed="false">Bridal &amp; Tunangan</button>
+            <button type="button" class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="graduation" aria-pressed="false">Wisuda &amp; Sekolah</button>
+            <button type="button" class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="party" aria-pressed="false">Party &amp; Event</button>
+            <button type="button" class="port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white" data-cat="video" aria-pressed="false"><i class="fa-brands fa-tiktok mr-1"></i> Video TikTok</button>
         </div>
 
-        <!-- Gallery Grid -->
+        <!-- Foto portfolio; klik foto tetap membuka lightbox -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
             {portfolioItems.map(item => (
                 <div
@@ -123,6 +125,8 @@ const portfolioItems = [
                     <img
                         src={item.img}
                         alt={item.alt}
+                        loading="lazy"
+                        decoding="async"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div class="absolute inset-0 bg-gradient-to-t from-espresso/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end text-white">
@@ -133,30 +137,65 @@ const portfolioItems = [
                 </div>
             ))}
         </div>
+
+        <!-- Video terintegrasi, tidak ada section TikTok terpisah -->
+        <div id="tiktok" class="mt-14 sm:mt-20" aria-label="Galeri video TikTok">
+            <h3 class="font-serif text-2xl sm:text-3xl font-bold text-espresso text-center mb-7">Beauty in Motion</h3>
+
+            <!-- Video unggulan + video hasil sinkronisasi dalam grid yang sama -->
+            <div id="portfolio-videos" class="flex flex-wrap justify-center gap-5 sm:gap-6" aria-live="polite">
+                {featured.map(video => (
+                    <article class="w-full max-w-[260px] bg-white rounded-3xl border border-warm-nude overflow-hidden shadow-sm">
+                        <div class="aspect-[9/16] bg-espresso relative" data-tiktok-id={video.id}>
+                            <button type="button" class="tiktok-play absolute inset-0 w-full h-full text-white flex flex-col items-center justify-center gap-3 bg-gradient-to-t from-espresso to-espresso/70 hover:from-espresso/90" aria-label={`Putar ${video.title}`}>
+                                <i class="fa-solid fa-circle-play text-5xl text-gold"></i>
+                                <span class="font-semibold text-sm px-4 text-center">Putar video</span>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-sm font-semibold text-espresso line-clamp-2">{video.title}</p>
+                            <a href={`${tiktokProfile}/video/${video.id}`} target="_blank" rel="noopener noreferrer" class="inline-block text-xs text-gold hover:underline mt-2">Buka di TikTok</a>
+                        </div>
+                    </article>
+                ))}
+            </div>
+
+            <div class="text-center mt-8">
+                <a href={tiktokProfile} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-espresso text-cream hover:bg-espresso/90 px-7 py-3.5 rounded-full text-xs font-bold tracking-wide transition-colors">
+                    <i class="fa-brands fa-tiktok"></i>
+                    Lihat Semua Video di TikTok
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 
 <script>
-    // Portfolio filter
-    const tabs = document.querySelectorAll<HTMLElement>('.port-tab');
-    const items = document.querySelectorAll<HTMLElement>('.port-item');
+    // Filter foto dan video pada satu section portfolio
+    const tabs = document.querySelectorAll<HTMLButtonElement>('#portfolio .port-tab');
+    const items = document.querySelectorAll<HTMLElement>('#portfolio .port-item');
+    const photoGrid = document.getElementById('portfolio-grid');
+    const videoGallery = document.getElementById('tiktok');
+    const inactiveTabClass = 'port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white';
+    const activeTabClass = 'port-tab active-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-espresso text-cream';
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            const cat = tab.dataset.cat!;
-
-            tabs.forEach(t => {
-                t.className = 'port-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-warm-nude text-espresso hover:bg-gold hover:text-white';
+            const category = tab.dataset.cat ?? 'all';
+            tabs.forEach(button => {
+                const active = button === tab;
+                button.className = active ? activeTabClass : inactiveTabClass;
+                button.setAttribute('aria-pressed', String(active));
             });
-            tab.className = 'port-tab active-tab px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-espresso text-cream';
-
+            if (photoGrid) photoGrid.style.display = category === 'video' ? 'none' : 'grid';
             items.forEach(item => {
-                item.style.display = (cat === 'all' || item.dataset.category === cat) ? 'block' : 'none';
+                item.style.display = (category === 'all' || item.dataset.category === category) ? '' : 'none';
             });
+            if (videoGallery) videoGallery.style.display = (category === 'all' || category === 'video') ? '' : 'none';
         });
     });
 
-    // Lightbox open on portfolio item click
+    // Foto tetap menggunakan modal lightbox dari app.ts
     items.forEach(item => {
         item.addEventListener('click', () => {
             const img = item.dataset.img!;
@@ -164,4 +203,84 @@ const portfolioItems = [
             window.dispatchEvent(new CustomEvent('openLightbox', { detail: { img, title } }));
         });
     });
+
+    // TikTok iframe hanya dimuat setelah tombol putar diklik
+    document.getElementById('tiktok')?.addEventListener('click', (event) => {
+        const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.tiktok-play');
+        if (!button) return;
+        const frame = button.closest<HTMLElement>('[data-tiktok-id]');
+        const id = frame?.dataset.tiktokId;
+        if (!frame || !id || !/^\d{15,25}$/.test(id)) return;
+
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.tiktok.com/player/v1/${id}`;
+        iframe.title = 'Video TikTok AULIAAS_MAKEUP';
+        iframe.className = 'w-full h-full absolute inset-0';
+        iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        frame.replaceChildren(iframe);
+    });
+
+    // Sinkronisasi feed dari public/tiktok-latest.json (jika tersedia).
+    // Tidak menampilkan pesan status/kosong ketika feed belum tersedia.
+    type RecentVideo = { id: string; title?: string };
+    const videoContainer = document.getElementById('portfolio-videos');
+    const profile = 'https://www.tiktok.com/@auliaas_makeup';
+    const featuredIds = new Set(
+        Array.from(document.querySelectorAll<HTMLElement>('#portfolio [data-tiktok-id]'))
+            .map(node => node.dataset.tiktokId)
+    );
+
+    function createVideoCard(video: RecentVideo): HTMLElement {
+        const article = document.createElement('article');
+        article.className = 'w-full max-w-[260px] bg-white rounded-3xl border border-warm-nude overflow-hidden shadow-sm';
+        const frame = document.createElement('div');
+        frame.className = 'aspect-[9/16] bg-espresso relative';
+        frame.dataset.tiktokId = video.id;
+        const play = document.createElement('button');
+        play.type = 'button';
+        play.className = 'tiktok-play absolute inset-0 w-full h-full text-white flex flex-col items-center justify-center gap-3 bg-gradient-to-t from-espresso to-espresso/70 hover:from-espresso/90';
+        play.setAttribute('aria-label', `Putar ${video.title || 'Video TikTok'}`);
+        play.innerHTML = '<i class="fa-solid fa-circle-play text-5xl text-gold"></i><span class="font-semibold text-sm px-4 text-center">Putar video</span>';
+        frame.append(play);
+
+        const details = document.createElement('div');
+        details.className = 'p-4';
+        const title = document.createElement('p');
+        title.className = 'text-sm font-semibold text-espresso line-clamp-2';
+        title.textContent = video.title || 'Video TikTok';
+        const link = document.createElement('a');
+        link.href = `${profile}/video/${video.id}`;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.className = 'inline-block text-xs text-gold hover:underline mt-2';
+        link.textContent = 'Buka di TikTok';
+        details.append(title, link);
+        article.append(frame, details);
+        return article;
+    }
+
+    async function loadRecentVideos() {
+        if (!videoContainer) return;
+        try {
+            const response = await fetch('/tiktok-latest.json', { cache: 'no-cache' });
+            if (!response.ok) return;
+            const payload: unknown = await response.json();
+            if (!payload || typeof payload !== 'object' || !('videos' in payload)) return;
+            const videos: unknown = payload.videos;
+            if (!Array.isArray(videos)) return;
+
+            const latest = videos.filter((video): video is RecentVideo =>
+                !!video && typeof video === 'object' &&
+                typeof video.id === 'string' && /^\d{15,25}$/.test(video.id) &&
+                !featuredIds.has(video.id)
+            ).slice(0, 6);
+
+            latest.forEach(video => videoContainer.append(createVideoCard(video)));
+        } catch {
+        }
+    }
+
+    loadRecentVideos();
 </script>
